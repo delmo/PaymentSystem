@@ -5,13 +5,19 @@
     <h:head>
         <title>Login Page</title>
     </h:head>
-     <h2>Hello, please log in:</h2>
-        <h:form>
-            Username: <h:inputText value="#{loginBean.email}"/>
-            Password: <h:inputSecret value="#{loginBean.password}"/>
+    <h:body>
+        <center>
+            <h2>Hello, please log in:</h2>
+            <h:form>
+                Username: <h:inputText value="#{loginBean.email}"/>
+                Password: <h:inputSecret value="#{loginBean.password}"/>
+                <br/>
+                <h:commandButton value="Submit" action="#{loginBean.login}"/>
+                <h:commandButton value="Reset" type="reset"/>
+            </h:form>
             <br/>
-            <h:commandButton value="Submit" action="#{loginBean.login}"/>
-            <h:commandButton value="Reset" type="reset"/>
-        </h:form>
+            <h:link value="back to home page" outcome="index"/>
+        </center>
+    </h:body>
 </html>
 

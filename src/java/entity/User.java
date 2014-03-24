@@ -7,7 +7,7 @@
 package entity;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,17 +40,17 @@ public class User implements Serializable {
     private String password;
     
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Timestamp registrationDate;
+    private Date registrationDate;
     
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Timestamp lastVisit;
+    private Date lastVisit;
 
     
     public User() {
     }
     
     public User(String firstname, String lastname, String email,
-            String password, Timestamp registrationDate, Timestamp lastVisit) {
+            String password, Date registrationDate, Date lastVisit) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
@@ -91,14 +91,23 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Timestamp getLastVisit() {
+    public Date getLastVisit() {
         return lastVisit;
     }
 
-    public void setLastVisit(Timestamp lastVisit) {
+    public void setLastVisit(Date lastVisit) {
         this.lastVisit = lastVisit;
     }
 
+    public Date getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", firstname=" + firstname + ", surname=" + lastname + ", email=" + email + ", password=" + password + ", registrationDate=" + registrationDate + ", lastVisit=" + lastVisit + '}';

@@ -3,8 +3,12 @@
   <persistence-unit name="PaymentSystemPU" transaction-type="JTA">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>jdbc/paymentsystemDB</jta-data-source>
+    <class>entity.Account</class>
+    <class>entity.User</class>
+    <class>entity.Group</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
       <property name="javax.persistence.jdbc.user" value="username"/>
       <property name="javax.persistence.jdbc.password" value="password"/>
     </properties>

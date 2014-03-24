@@ -7,7 +7,7 @@
 package ejb;
 
 import entity.User;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface UserStorageService {
     public void registerUser(String firstname, String lastname, String email, String password, 
-            Timestamp registrationDate, Timestamp lastVisit);
+            Date registrationDate, Date lastVisit);
           
     public List<User> getUserList();
 }

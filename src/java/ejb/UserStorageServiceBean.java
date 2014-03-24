@@ -12,7 +12,6 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,7 +34,7 @@ public class UserStorageServiceBean implements UserStorageService{
 
     @Override
     public void registerUser(String firstname, String lastname, String email, 
-            String password, Timestamp registrationDate, Timestamp lastVisit) {
+            String password, Date registrationDate, Date lastVisit) {
         try {
             User sys_user;
             Group sys_user_group;
@@ -54,7 +53,7 @@ public class UserStorageServiceBean implements UserStorageService{
             em.persist(sys_user_group);
             
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserStorageService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserStorageServiceBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         
        

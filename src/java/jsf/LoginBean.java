@@ -54,7 +54,7 @@ public class LoginBean implements Serializable{
             context.addMessage(null, new FacesMessage("Login failed."));
             return "error";
         }
-        return "/faces/index.xhtml";
+        return "/faces/users/show.xhtml";
     }
 
     public void logout() {

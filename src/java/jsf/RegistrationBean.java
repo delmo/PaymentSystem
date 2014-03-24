@@ -6,6 +6,7 @@
 
 package jsf;
 
+import ejb.UserStorageService;
 import ejb.UserStorageServiceBean;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -20,6 +21,7 @@ import javax.inject.Named;
 @Named
 @RequestScoped
 public class RegistrationBean {
+    
     @EJB
     UserStorageServiceBean usrSrv;
     
@@ -27,13 +29,15 @@ public class RegistrationBean {
     String password;
     String firstname;
     String lastname;
-    Timestamp registrationDate;
-    Timestamp lastVisit;
+    Date registrationDate;
+    Date lastVisit;
 
+    public RegistrationBean() {
+    }
+    
     //call the injected EJB
-    public String register() {
-        Date current = new Date();
-        registrationDate = new Timestamp(current.getTime());
+    public String register() {        
+        registrationDate = new Date();
         usrSrv.registerUser(firstname, lastname, email, password, registrationDate, registrationDate);
         return "index";
     }
@@ -78,19 +82,19 @@ public class RegistrationBean {
         this.lastname = lastname;
     }
 
-    public Timestamp getRegistrationDate() {
+    public Date getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(Timestamp registrationDate) {
+    public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
 
-    public Timestamp getLastVisit() {
+    public Date getLastVisit() {
         return lastVisit;
     }
 
-    public void setLastVisit(Timestamp lastVisit) {
+    public void setLastVisit(Date lastVisit) {
         this.lastVisit = lastVisit;
     }
     

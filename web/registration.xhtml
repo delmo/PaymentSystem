@@ -25,25 +25,18 @@
                     <h:outputText value="Email :"></h:outputText>
                     <h:inputText id="email" value="#{registrationBean.email}" required="true"
                                  requiredMessage="Please Enter Email!"></h:inputText>
-
-<!--                    <h:outputText value="Confirm Email :"></h:outputText>
-                    <h:inputText id="confirmemail" value="#{userBean.confirmemail}"
-                                 required="true" requiredMessage="Please Confirm Email!"></h:inputText>          -->
-
+                 
                     <h:outputText value="Password :"></h:outputText>
                     <h:inputSecret id="password" value="#{registrationBean.password}"
                                    required="true" requiredMessage="Please Enter Password!"></h:inputSecret>
-
-<!--                    <h:outputText value="Confirm Password :"></h:outputText>
-                    <h:inputSecret id="confirmpassword"
-                                   value="#{userBean.confirmpassword}" required="true"
-                                   requiredMessage="Please Confirm Password!"></h:inputSecret>-->
 
                     <h:commandButton type="submit" value="Submit"
                                      action="#{registrationBean.register}"></h:commandButton>
                     <h:commandButton type="reset" value="Reset"></h:commandButton>
                 </h:panelGrid>
             </h:form>
+            <br/>
+            <h:link value="back to home page" outcome="index"/>
         </center>
     </h:body>
 </html>
