@@ -21,4 +21,53 @@
     <welcome-file-list>
         <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
+    <security-constraint>
+        <display-name>ForUsers</display-name>
+        <web-resource-collection>
+            <web-resource-name>ResourceForUsers</web-resource-name>
+            <description/>
+            <url-pattern>/faces/users/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>users</role-name>
+            <role-name>admins</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <security-constraint>
+        <display-name>ForAdmins</display-name>
+        <web-resource-collection>
+            <web-resource-name>ResourceForAdmins</web-resource-name>
+            <description/>
+            <url-pattern>/faces/admins/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>admins</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <description/>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>JDBCPaymentSystem</realm-name>
+        <form-login-config>
+            <form-login-page>/login.xhtml</form-login-page>
+            <form-error-page>/error.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+    <security-role>
+        <description>all users of the system</description>
+        <role-name>users</role-name>
+    </security-role>
+    <security-role>
+        <description>all users with admin priviledges</description>
+        <role-name>admins</role-name>
+    </security-role>
 </web-app>

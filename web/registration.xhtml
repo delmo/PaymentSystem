@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Registration Form</title>
+        <link rel="stylesheet" type="text/css" href="resources/main.css" />
+    </h:head>
+    <h:body>
+        <center>
+            <h:outputText value="User Registration" styleClass="header"></h:outputText>
+            <br/><br/>
+            <h:form>
+                <h:messages errorClass="errorMessage" infoClass="infoMessage" warnClass="warnMessage"></h:messages>
+                <h:panelGrid columns="2">
+
+                    <h:outputText value="First name :"></h:outputText>
+                    <h:inputText id="firstname" value="#{registrationBean.firstname}"
+                                 required="true" requiredMessage="Please Enter First Name!"></h:inputText>
+
+                    <h:outputText value="Last name :"></h:outputText>
+                    <h:inputText id="lastname" value="#{registrationBean.lastname}"
+                                 required="true" requiredMessage="Please Enter Last Name!"></h:inputText>
+
+                    <h:outputText value="Email :"></h:outputText>
+                    <h:inputText id="email" value="#{registrationBean.email}" required="true"
+                                 requiredMessage="Please Enter Email!"></h:inputText>
+
+<!--                    <h:outputText value="Confirm Email :"></h:outputText>
+                    <h:inputText id="confirmemail" value="#{userBean.confirmemail}"
+                                 required="true" requiredMessage="Please Confirm Email!"></h:inputText>          -->
+
+                    <h:outputText value="Password :"></h:outputText>
+                    <h:inputSecret id="password" value="#{registrationBean.password}"
+                                   required="true" requiredMessage="Please Enter Password!"></h:inputSecret>
+
+<!--                    <h:outputText value="Confirm Password :"></h:outputText>
+                    <h:inputSecret id="confirmpassword"
+                                   value="#{userBean.confirmpassword}" required="true"
+                                   requiredMessage="Please Confirm Password!"></h:inputSecret>-->
+
+                    <h:commandButton type="submit" value="Submit"
+                                     action="#{registrationBean.register}"></h:commandButton>
+                    <h:commandButton type="reset" value="Reset"></h:commandButton>
+                </h:panelGrid>
+            </h:form>
+        </center>
+    </h:body>
+</html>
+
