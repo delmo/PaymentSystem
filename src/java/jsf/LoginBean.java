@@ -48,8 +48,7 @@ public class LoginBean implements Serializable{
         System.out.println("Password: " + password);
         try {
             //this method will actually check in the realm for the provided credentials
-           
-            request.login(this.email, this.password);
+           request.login(this.email, this.password);
         } catch (ServletException e) {
             context.addMessage(null, new FacesMessage("Login failed."));
             return "error";

@@ -6,7 +6,7 @@
 
 package ejb;
 
-import entity.User;
+import entity.SystemUser;
 import java.util.Date;
 import java.util.List;
 
@@ -18,5 +18,9 @@ public interface UserStorageService {
     public void registerUser(String firstname, String lastname, String email, String password, 
             Date registrationDate, Date lastVisit);
           
-    public List<User> getUserList();
+    public List<SystemUser> getUserList();
+    
+    public void removeUser(String email);
+    
+    
 }

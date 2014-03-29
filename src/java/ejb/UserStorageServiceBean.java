@@ -6,12 +6,15 @@
 
 package ejb;
 
-import entity.Group;
-import entity.User;
+import entity.PaymentAccount;
+import entity.UserGroup;
+import entity.SystemUser;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,6 +32,30 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class UserStorageServiceBean implements UserStorageService{
     
+//    @PersistenceUnit
+//    EntityManagerFactory emf;
+//    EntityManager em;
+//    @Resource
+//    UserTransaction utx;
+//    ...
+//em  = emf.createEntityManager();
+//
+//    
+//        try {
+//  utx.begin();
+//        em.persist(SomeEntity);
+//        em.merge(AnotherEntity);
+//        em.remove(ThirdEntity);
+//        utx.commit();
+//    }
+//    catch (Exception e
+//
+//    
+//        ) {
+//  utx.rollback();
+//    }
+    
+    
     @PersistenceContext
     EntityManager em;
 
@@ -36,8 +63,9 @@ public class UserStorageServiceBean implements UserStorageService{
     public void registerUser(String firstname, String lastname, String email, 
             String password, Date registrationDate, Date lastVisit) {
         try {
-            User sys_user;
-            Group sys_user_group;
+            SystemUser sys_user;
+            UserGroup sys_user_group;
+            PaymentAccount sys_user_account;
 
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             String passwd = password;
@@ -46,11 +74,13 @@ public class UserStorageServiceBean implements UserStorageService{
             BigInteger bigInt = new BigInteger(1, digest);
             String paswdToStoreInDB = bigInt.toString(16);
 
-            sys_user = new User(firstname, lastname, email, paswdToStoreInDB, registrationDate, lastVisit);
-            sys_user_group = new Group(email, "users");
-
+            sys_user = new SystemUser(firstname, lastname, email, paswdToStoreInDB, registrationDate, lastVisit);
+            sys_user_group = new UserGroup(email, "users");
+            sys_user_account = new PaymentAccount(new BigDecimal("1000000.00"), "USD", sys_user);
+            
             em.persist(sys_user);
             em.persist(sys_user_group);
+            em.persist(sys_user_account);
             
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
             Logger.getLogger(UserStorageServiceBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,8 +90,9 @@ public class UserStorageServiceBean implements UserStorageService{
     }
 
     @Override
-    public List<User> getUserList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<SystemUser> getUserList() {
+        List<SystemUser> users = em.createNamedQuery("findAllSystemUsers").getResultList();
+        return users;
     }
     
 //    @PostConstruct
@@ -74,4 +105,19 @@ public class UserStorageServiceBean implements UserStorageService{
 //        System.out.println("UserStore: PreDestroy");
 //    }
 //    
+    
+    
+//    @PersistenceContext
+//    EntityManager em;
+//
+//    public void enterOrder(int custID, Order newOrder) {
+//        Customer cust = em.find(Customer.class, custID);
+//        cust.getOrders().add(newOrder);
+//        newOrder.setCustomer(cust);
+//    }
+
+    @Override
+    public void removeUser(String email) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

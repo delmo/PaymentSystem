@@ -58,8 +58,8 @@
         <auth-method>FORM</auth-method>
         <realm-name>JDBCPaymentSystem</realm-name>
         <form-login-config>
-            <form-login-page>/login.xhtml</form-login-page>
-            <form-error-page>/error.xhtml</form-error-page>
+            <form-login-page>/faces/login.xhtml</form-login-page>
+            <form-error-page>/faces/error.xhtml</form-error-page>
         </form-login-config>
     </login-config>
     <security-role>

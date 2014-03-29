@@ -3,53 +3,78 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.REMOVE;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  *
  * @author Rhayan
  */
 @Entity
-public class User implements Serializable {
-    
+@NamedQueries({
+    @NamedQuery(
+            name="findAllSystemUsersWithEmail",
+            query="SELECT u FROM SystemUser u WHERE u.email LIKE :custEmail"
+    ),
+    @NamedQuery(
+            name="findAllSystemUsers",
+            query="SELECT u FROM SystemUser u"
+    )
+})
+public class SystemUser implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    
+    private Long Id;
+
     @NotNull
     private String firstname;
-    
+
     @NotNull
     private String lastname;
-    
+
     @NotNull
+    @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+            + "[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+            + "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+            message = "{invalid.email}")
     private String email;
-    
+
     @NotNull
     private String password;
-    
-    @Temporal(javax.persistence.TemporalType.DATE)
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date registrationDate;
-    
-    @Temporal(javax.persistence.TemporalType.DATE)
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date lastVisit;
 
-    
-    public User() {
+    @OneToOne(cascade = ALL, mappedBy = "systemUser")    
+    private PaymentAccount userAccount;
+
+    @ManyToOne    
+    private UserGroup userGroup;
+
+    public SystemUser() {
     }
-    
-    public User(String firstname, String lastname, String email,
+
+    public SystemUser(String firstname, String lastname, String email,
             String password, Date registrationDate, Date lastVisit) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -57,6 +82,7 @@ public class User implements Serializable {
         this.password = password;
         this.registrationDate = registrationDate;
         this.lastVisit = lastVisit;
+        
     }
 
     public String getFirstname() {
@@ -107,16 +133,31 @@ public class User implements Serializable {
         this.registrationDate = registrationDate;
     }
 
-    
+    public PaymentAccount getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(PaymentAccount userAccount) {
+        this.userAccount = userAccount;
+    }
+
+    public UserGroup getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", firstname=" + firstname + ", surname=" + lastname + ", email=" + email + ", password=" + password + ", registrationDate=" + registrationDate + ", lastVisit=" + lastVisit + '}';
+        return "User{" + "id=" + Id + ", firstname=" + firstname + ", surname=" + lastname + ", email=" + email + ", password=" + password + ", registrationDate=" + registrationDate + ", lastVisit=" + lastVisit + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.id);
+        hash = 53 * hash + Objects.hashCode(this.Id);
         hash = 53 * hash + Objects.hashCode(this.firstname);
         hash = 53 * hash + Objects.hashCode(this.lastname);
         hash = 53 * hash + Objects.hashCode(this.email);
@@ -134,8 +175,8 @@ public class User implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final User other = (User) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        final SystemUser other = (SystemUser) obj;
+        if (!Objects.equals(this.Id, other.Id)) {
             return false;
         }
         if (!Objects.equals(this.firstname, other.firstname)) {
@@ -158,7 +199,5 @@ public class User implements Serializable {
         }
         return true;
     }
-    
-    
-    
+
 }

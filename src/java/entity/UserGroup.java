@@ -3,15 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -19,22 +22,25 @@ import javax.validation.constraints.NotNull;
  * @author Rhayan
  */
 @Entity
-public class Group implements Serializable{
-    
+public class UserGroup implements Serializable {
+
     @NotNull
     private String groupname;
-    
+
     @NotNull
     private String email;
-   
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long Id;
 
-    public Group() {
+    @OneToMany(mappedBy = "userGroup")
+    private Collection<SystemUser> systemUsers;
+
+    public UserGroup() {
     }
 
-    public Group(String email, String groupname) {
+    public UserGroup(String email, String groupname) {
         this.groupname = groupname;
         this.email = email;
     }
@@ -55,12 +61,16 @@ public class Group implements Serializable{
         this.email = email;
     }
 
+    public Collection<SystemUser> getSystemUsers() {
+        return systemUsers;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
         hash = 29 * hash + Objects.hashCode(this.groupname);
         hash = 29 * hash + Objects.hashCode(this.email);
-        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.Id);
         return hash;
     }
 
@@ -72,19 +82,17 @@ public class Group implements Serializable{
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Group other = (Group) obj;
+        final UserGroup other = (UserGroup) obj;
         if (!Objects.equals(this.groupname, other.groupname)) {
             return false;
         }
         if (!Objects.equals(this.email, other.email)) {
             return false;
         }
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.Id, other.Id)) {
             return false;
         }
         return true;
     }
-    
-    
-    
+
 }
