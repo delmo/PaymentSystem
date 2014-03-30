@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Rhayan
  */
-public interface UserStorageService {
+public interface UserServiceModel {
     public void registerUser(String firstname, String lastname, String email, String password, 
             Date registrationDate, Date lastVisit);
           

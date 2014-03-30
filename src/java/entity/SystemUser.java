@@ -8,12 +8,12 @@ package entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.CascadeType.REMOVE;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -41,6 +41,7 @@ public class SystemUser implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "USER_ID")
     private Long Id;
 
     @NotNull
@@ -65,10 +66,11 @@ public class SystemUser implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date lastVisit;
 
-    @OneToOne(cascade = ALL, mappedBy = "systemUser")    
+    @OneToOne(mappedBy = "systemUser")    
     private PaymentAccount userAccount;
 
-    @ManyToOne    
+    @ManyToOne
+    @JoinColumn(name = "GROUP_ID")
     private UserGroup userGroup;
 
     public SystemUser() {

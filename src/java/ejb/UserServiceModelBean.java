@@ -30,7 +30,7 @@ import javax.persistence.PersistenceContext;
  * @author Rhayan
  */
 @Stateless
-public class UserStorageServiceBean implements UserStorageService{
+public class UserServiceModelBean implements UserServiceModel{
     
 //    @PersistenceUnit
 //    EntityManagerFactory emf;
@@ -83,7 +83,7 @@ public class UserStorageServiceBean implements UserStorageService{
             em.persist(sys_user_account);
             
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserStorageServiceBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserServiceModelBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         
        

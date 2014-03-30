@@ -6,7 +6,7 @@
 
 package ejb;
 
-import entity.PaymentTransaction;
+import entity.PaymentAccount;
 import entity.SystemUser;
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,24 +17,28 @@ import javax.persistence.PersistenceContext;
  *
  * @author Rhayan
  */
-public class TransactionServiceBean implements TransactionService{
+public class AccountServiceModelBean implements AccountServiceModel{
 
     @PersistenceContext
     EntityManager em;
     
-    
     @Override
-    public List<PaymentTransaction> getPaymentTransactionList() {
+    public List<PaymentAccount> getAllPaymentAccounts() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void sendPayment(SystemUser payer, SystemUser payee, BigDecimal amount) {
+    public void addPaymentAccount(SystemUser user, BigDecimal amount, String currency) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void receivePayment(SystemUser user, SystemUser payee, BigDecimal amount) {
+    public void debit(SystemUser user, BigDecimal amount, String currency) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void credit(SystemUser user, BigDecimal amount, String currency) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

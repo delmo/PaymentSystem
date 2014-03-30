@@ -6,7 +6,7 @@
 
 package jsf;
 
-import ejb.UserStorageService;
+import ejb.UserServiceModel;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -21,7 +21,7 @@ import javax.inject.Named;
 public class RegistrationBean {
     
     @EJB
-    UserStorageService usrSrv;
+    UserServiceModel usrSrv;
     
     String email;
     String password;
@@ -40,11 +40,11 @@ public class RegistrationBean {
         return "index";
     }
     
-    public UserStorageService getUsrSrv() {
+    public UserServiceModel getUsrSrv() {
         return usrSrv;
     }
 
-    public void setUsrSrv(UserStorageService usrSrv) {
+    public void setUsrSrv(UserServiceModel usrSrv) {
         this.usrSrv = usrSrv;
     }
 

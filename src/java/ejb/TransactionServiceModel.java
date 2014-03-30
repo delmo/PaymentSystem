@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author Rhayan
  */
-public interface TransactionService {
+public interface TransactionServiceModel {
     
     public List<PaymentTransaction> getPaymentTransactionList();
     

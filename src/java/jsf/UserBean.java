@@ -6,7 +6,7 @@
 
 package jsf;
 
-import ejb.UserStorageService;
+import ejb.UserServiceModel;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -33,7 +33,7 @@ public class UserBean {
     final static Logger myLogger = Logger.getLogger("javax.enterprise.resource.webcontainer.jsf");
     
     @EJB
-    private UserStorageService userStore;
+    private UserServiceModel userStore;
     
 //    @EJB
 //    private DateAndTime timestamp;

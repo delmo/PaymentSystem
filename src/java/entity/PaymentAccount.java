@@ -10,10 +10,12 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Objects;
 import static javax.persistence.CascadeType.ALL;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
@@ -28,14 +30,17 @@ public class PaymentAccount implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ACCOUNT_ID")
     private Long Id;
 
     private String currency;
     
     @OneToOne
+    @JoinColumn(name = "USER_ID")
     private SystemUser systemUser;
 
     @ManyToOne
+    @JoinColumn(name = "TRANSACTION_ID")
     private PaymentTransaction paymentTransaction;
 
     private BigDecimal balance;
