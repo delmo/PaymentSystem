@@ -31,7 +31,7 @@ import javax.validation.constraints.Pattern;
 @NamedQueries({
     @NamedQuery(
             name="findAllSystemUsersWithEmail",
-            query="SELECT u FROM SystemUser u WHERE u.email LIKE :custEmail"
+            query="SELECT u FROM SystemUser u WHERE u.email = :email"
     ),
     @NamedQuery(
             name="findAllSystemUsers",

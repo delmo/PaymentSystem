@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -75,6 +76,16 @@ public class UserServiceModelBean implements UserServiceModel{
         SystemUser user;
         
         user = em.find(SystemUser.class, userId);
+        
+        return user;
+    }
+    
+    @Override
+    public SystemUser findUser(String email) {
+        SystemUser user;
+        Query q = em.createQuery("SELECT u FROM SystemUser u WHERE u.email = :email", SystemUser.class);
+        
+        user = (SystemUser) q.setParameter("email", email).getSingleResult();
         
         return user;
     }

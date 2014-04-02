@@ -16,7 +16,11 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -142,10 +146,11 @@ public class UserBean {
         this.id = id;
     }
     
-    public String search(){
-        user = userStore.getUser(this.id);
-        
-        return "showuser";
+    public String searchByEmail(){
+//        user = userStore.getUser(this.id);
+        user = userStore.findUser(this.email);
+        //return "showuser";
+        return "/faces/users/show.xhtml";
     }
 
     public SystemUser getUser() {
@@ -156,7 +161,33 @@ public class UserBean {
         this.user = user;
     }
     
-    
+    public String login() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        System.out.println("Username: " + email);
+        System.out.println("Password: " + password);
+        try {
+            //this method will actually check in the realm for the provided credentials
+           request.login(this.email, this.password);
+           
+        } catch (ServletException e) {
+            context.addMessage(null, new FacesMessage("Login failed."));
+            return "error";
+        }
+        return searchByEmail();
+    }
+
+    public void logout() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        try {
+            //this method will disassociate the principal from the session (effectively logging him/her out)
+            request.logout();
+            context.addMessage(null, new FacesMessage("User is logged out"));
+        } catch (ServletException e) {
+            context.addMessage(null, new FacesMessage("Logout failed."));
+        }
+    }
     
     @PostConstruct
     public void postConstruct() {

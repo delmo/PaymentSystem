@@ -7,9 +7,9 @@
     </h:head>
     <h:body>
         <h:form>
-            <h:inputText label="Input user's ID: " value="#{userBean.id}" />
+            <h:inputText label="Input user's ID: " value="#{userBean.email}" />
             <h:commandButton type="submit" value="Submit"
-                                     action="#{userBean.search}"></h:commandButton>
+                                     action="#{userBean.searchByEmail}"></h:commandButton>
         </h:form>
         
     </h:body>
