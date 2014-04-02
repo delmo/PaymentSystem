@@ -7,6 +7,7 @@
 package ejb;
 
 import entity.SystemUser;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -16,11 +17,19 @@ import java.util.List;
  */
 public interface UserServiceModel {
     public void registerUser(String firstname, String lastname, String email, String password, 
-            Date registrationDate, Date lastVisit);
+            BigDecimal balance, String currency, Date registrationDate, Date lastVisit);
           
     public List<SystemUser> getUserList();
     
-    public void removeUser(String email);
+    public void saveUser(SystemUser user);
+    
+    public void saveNewUser(SystemUser user);
+    
+    public void updateUser(SystemUser user);
+    
+    public void removeUser(SystemUser user);
+        
+    public SystemUser getUser(Long userId);
     
     
 }

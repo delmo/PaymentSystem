@@ -45,6 +45,14 @@ public class UserGroup implements Serializable {
         this.email = email;
     }
 
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long Id) {
+        this.Id = Id;
+    }
+
     public String getGroupname() {
         return groupname;
     }

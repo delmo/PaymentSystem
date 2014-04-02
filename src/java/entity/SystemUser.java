@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -64,27 +65,42 @@ public class SystemUser implements Serializable {
     private Date registrationDate;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date lastVisit;
-
-    @OneToOne(mappedBy = "systemUser")    
-    private PaymentAccount userAccount;
+    private Date lastVisit;   
 
     @ManyToOne
     @JoinColumn(name = "GROUP_ID")
     private UserGroup userGroup;
+    
+    @ManyToOne
+    @JoinColumn(name = "TRANSACTION_ID")
+    private PaymentTransaction paymentTransaction;
+    
+    private String currency;
+    
+    private BigDecimal balance;
 
     public SystemUser() {
     }
 
     public SystemUser(String firstname, String lastname, String email,
-            String password, Date registrationDate, Date lastVisit) {
+            String password, BigDecimal balance, String currency, Date registrationDate, Date lastVisit) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
+        this.balance = balance;
+        this.currency = currency;
         this.registrationDate = registrationDate;
         this.lastVisit = lastVisit;
         
+    }
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long Id) {
+        this.Id = Id;
     }
 
     public String getFirstname() {
@@ -135,14 +151,6 @@ public class SystemUser implements Serializable {
         this.registrationDate = registrationDate;
     }
 
-    public PaymentAccount getUserAccount() {
-        return userAccount;
-    }
-
-    public void setUserAccount(PaymentAccount userAccount) {
-        this.userAccount = userAccount;
-    }
-
     public UserGroup getUserGroup() {
         return userGroup;
     }
@@ -151,21 +159,35 @@ public class SystemUser implements Serializable {
         this.userGroup = userGroup;
     }
 
-    @Override
-    public String toString() {
-        return "User{" + "id=" + Id + ", firstname=" + firstname + ", surname=" + lastname + ", email=" + email + ", password=" + password + ", registrationDate=" + registrationDate + ", lastVisit=" + lastVisit + '}';
+    public PaymentTransaction getPaymentTransaction() {
+        return paymentTransaction;
+    }
+
+    public void setPaymentTransaction(PaymentTransaction paymentTransaction) {
+        this.paymentTransaction = paymentTransaction;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.Id);
-        hash = 53 * hash + Objects.hashCode(this.firstname);
-        hash = 53 * hash + Objects.hashCode(this.lastname);
-        hash = 53 * hash + Objects.hashCode(this.email);
-        hash = 53 * hash + Objects.hashCode(this.password);
-        hash = 53 * hash + Objects.hashCode(this.registrationDate);
-        hash = 53 * hash + Objects.hashCode(this.lastVisit);
+        hash = 71 * hash + Objects.hashCode(this.Id);
+        hash = 71 * hash + Objects.hashCode(this.email);
         return hash;
     }
 
@@ -181,25 +203,19 @@ public class SystemUser implements Serializable {
         if (!Objects.equals(this.Id, other.Id)) {
             return false;
         }
-        if (!Objects.equals(this.firstname, other.firstname)) {
-            return false;
-        }
-        if (!Objects.equals(this.lastname, other.lastname)) {
-            return false;
-        }
         if (!Objects.equals(this.email, other.email)) {
-            return false;
-        }
-        if (!Objects.equals(this.password, other.password)) {
-            return false;
-        }
-        if (!Objects.equals(this.registrationDate, other.registrationDate)) {
-            return false;
-        }
-        if (!Objects.equals(this.lastVisit, other.lastVisit)) {
             return false;
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "SystemUser{" + "Id=" + Id + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email + ", password=" + password + ", registrationDate=" + registrationDate + ", lastVisit=" + lastVisit + ", userGroup=" + userGroup + ", currency=" + currency + ", balance=" + balance + '}';
+    }
+
+    
+    
+   
 
 }

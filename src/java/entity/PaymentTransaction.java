@@ -9,17 +9,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
-import static javax.persistence.CascadeType.ALL;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
@@ -47,16 +41,16 @@ public class PaymentTransaction implements Serializable {
     private Date date;
     
     @OneToMany(mappedBy = "paymentTransaction")
-    private Collection<PaymentAccount> usersAccount;
+    private Collection<SystemUser> usersAccount;
     
-    private PaymentAccount payer;
+    private SystemUser payer;
     
-    private PaymentAccount payee;
+    private SystemUser payee;
 
     public PaymentTransaction() {
     }
 
-    public PaymentTransaction(PaymentAccount payer, PaymentAccount payee, String paymentType, String paymentStatus, BigDecimal amount, Date date) {
+    public PaymentTransaction(SystemUser payer, SystemUser payee, String paymentType, String paymentStatus, BigDecimal amount, Date date) {
         this.payer = payer;
         this.payee = payee;
         this.paymentType = paymentType;
@@ -65,7 +59,7 @@ public class PaymentTransaction implements Serializable {
         this.date = date;
     }
 
-    public Collection<PaymentAccount> getUsersAccount() {
+    public Collection<SystemUser> getUsersAccount() {
         return usersAccount;
     }
 
@@ -109,19 +103,19 @@ public class PaymentTransaction implements Serializable {
         this.id = id;
     }
 
-    public PaymentAccount getPayer() {
+    public SystemUser getPayer() {
         return payer;
     }
 
-    public void setPayer(PaymentAccount payer) {
+    public void setPayer(SystemUser payer) {
         this.payer = payer;
     }
 
-    public PaymentAccount getPayee() {
+    public SystemUser getPayee() {
         return payee;
     }
 
-    public void setPayee(PaymentAccount payee) {
+    public void setPayee(SystemUser payee) {
         this.payee = payee;
     }
 

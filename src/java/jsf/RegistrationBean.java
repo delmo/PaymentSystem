@@ -7,6 +7,7 @@
 package jsf;
 
 import ejb.UserServiceModel;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -27,8 +28,10 @@ public class RegistrationBean {
     String password;
     String firstname;
     String lastname;
+    BigDecimal balance;
+    String currency;
     Date registrationDate;
-    Date lastVisit;
+    Date lastVisit;    
 
     public RegistrationBean() {
     }
@@ -36,7 +39,8 @@ public class RegistrationBean {
     //call the injected EJB
     public String register() {        
         registrationDate = new Date();
-        usrSrv.registerUser(firstname, lastname, email, password, registrationDate, registrationDate);
+        balance = new BigDecimal(1000000000);
+        usrSrv.registerUser(firstname, lastname, email, password, balance, currency, registrationDate, registrationDate);
         return "index";
     }
     
@@ -95,6 +99,21 @@ public class RegistrationBean {
     public void setLastVisit(Date lastVisit) {
         this.lastVisit = lastVisit;
     }
-    
-     
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+       
 }

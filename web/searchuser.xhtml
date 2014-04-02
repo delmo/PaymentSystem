@@ -3,10 +3,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>
-        <title>Account Details</title>
+        <title>Facelet Title</title>
     </h:head>
     <h:body>
-        <h:inputText label="Input user's ID: " value="#{userBean.email}" />
+        <h:form>
+            <h:inputText label="Input user's ID: " value="#{userBean.id}" />
+            <h:commandButton type="submit" value="Submit"
+                                     action="#{userBean.search}"></h:commandButton>
+        </h:form>
+        
     </h:body>
 </html>
 

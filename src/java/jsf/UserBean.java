@@ -7,6 +7,8 @@
 package jsf;
 
 import ejb.UserServiceModel;
+import entity.SystemUser;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -25,22 +27,49 @@ import javax.inject.Named;
 @RequestScoped
 public class UserBean {
     
+    private Long id;
+    private SystemUser user;
     private String firstname;
     private String lastname;
     private String email;
     private String password;
-    private Timestamp registrationDate;
+    private BigDecimal balance;
+    private String currency;
+    private Date registrationDate;
+    private Date updateDate;
     final static Logger myLogger = Logger.getLogger("javax.enterprise.resource.webcontainer.jsf");
     
     @EJB
     private UserServiceModel userStore;
     
-//    @EJB
-//    private DateAndTime timestamp;
-
     public UserBean() {
+        user = new SystemUser();
     }
 
+     public String saveCustomer() {
+        String returnValue = "customer_saved";
+        
+        try {
+            populateCustomer();
+            userStore.saveUser(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            returnValue = "error_saving_customer";
+        }
+        
+        return returnValue;
+    }
+    
+    private void populateCustomer() {
+        if (user == null) {
+            user = new SystemUser();
+        }
+        user.setFirstname(getFirstname());
+        user.setLastname(getLastname());
+        user.setEmail(getEmail());
+    }
+       
+    
     public String getFirstname() {
         return firstname;
     }
@@ -73,23 +102,60 @@ public class UserBean {
         this.password = password;
     }
 
-    public Timestamp getRegistrationDate() {
+    public Date getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(Timestamp registrationDate) {
+    public void setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
     }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     
-//     public String addUser() {
-//        userStore.RegisterUser(firstname, lastname, email, password, timestamp.getCurrentDateTime());
-//        myLogger.info(userStore.toString());
-//        return "index";
-//    }
+    public String search(){
+        user = userStore.getUser(this.id);
+        
+        return "showuser";
+    }
+
+    public SystemUser getUser() {
+        return user;
+    }
+
+    public void setUser(SystemUser user) {
+        this.user = user;
+    }
     
-//    public String goBack() {
-//        return "index";
-//    } 
     
     
     @PostConstruct
