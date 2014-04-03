@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package jsf;
+package controllers;
 
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;

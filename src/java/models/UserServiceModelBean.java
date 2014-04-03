@@ -4,10 +4,10 @@
  * and open the template in the editor.
  */
 
-package ejb;
+package models;
 
-import entity.UserGroup;
-import entity.SystemUser;
+import entities.UserGroup;
+import entities.SystemUser;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -90,7 +90,7 @@ public class UserServiceModelBean implements UserServiceModel{
         return user;
     }
     
-     @Override
+    @Override
     public void saveUser(SystemUser user) {
         if(user.getId() == null){
             saveNewUser(user);

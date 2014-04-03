@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package entity;
+package entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -53,8 +53,8 @@ public class PaymentTransaction implements Serializable {
     public PaymentTransaction(SystemUser payer, SystemUser payee, String paymentType, String paymentStatus, BigDecimal amount, Date date) {
         this.payer = payer;
         this.payee = payee;
-        this.paymentType = paymentType;
-        this.paymentStatus = paymentStatus;
+        this.paymentType = paymentType; //debit or credit to payer 
+        this.paymentStatus = paymentStatus; //pending or completed
         this.amount = amount;
         this.date = date;
     }

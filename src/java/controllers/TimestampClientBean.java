@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package jsf;
+package controllers;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;

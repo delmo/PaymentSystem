@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-package ejb;
+package models;
 
-import entity.SystemUser;
+import entities.SystemUser;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;

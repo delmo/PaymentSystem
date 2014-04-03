@@ -4,10 +4,11 @@
  * and open the template in the editor.
  */
 
-package jsf;
+package controllers;
 
-import ejb.UserServiceModel;
-import entity.SystemUser;
+import models.UserServiceModel;
+import entities.SystemUser;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -16,6 +17,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -28,8 +30,8 @@ import javax.servlet.http.HttpServletRequest;
  * @author Rhayan
  */
 @Named
-@RequestScoped
-public class UserBean {
+@SessionScoped
+public class UserBean implements Serializable{
     
     private Long id;
     private SystemUser user;
@@ -177,7 +179,7 @@ public class UserBean {
         return searchByEmail();
     }
 
-    public void logout() {
+    public String logout() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
@@ -187,6 +189,7 @@ public class UserBean {
         } catch (ServletException e) {
             context.addMessage(null, new FacesMessage("Logout failed."));
         }
+        return "/faces/index.xhtml";
     }
     
     @PostConstruct

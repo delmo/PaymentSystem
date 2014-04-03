@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-package jsf;
+package controllers;
 
-import ejb.UserServiceModel;
+import models.UserServiceModel;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.ejb.EJB;
