@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,10 +33,13 @@ public class PaymentTransaction implements Serializable {
     @Column(name = "TRANSACTION_ID")
     private Long id;
 
-    private String paymentType;
+    @Enumerated(EnumType.STRING)
+    private PaymentType paymentType;
 
-    private String paymentStatus;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
 
+    @Column(name="AMOUNT", scale = 2, precision = 13)
     private BigDecimal amount;
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -50,7 +55,7 @@ public class PaymentTransaction implements Serializable {
     public PaymentTransaction() {
     }
 
-    public PaymentTransaction(SystemUser payer, SystemUser payee, String paymentType, String paymentStatus, BigDecimal amount, Date date) {
+    public PaymentTransaction(SystemUser payer, SystemUser payee, PaymentType paymentType, PaymentStatus paymentStatus, BigDecimal amount, Date date) {
         this.payer = payer;
         this.payee = payee;
         this.paymentType = paymentType; //debit or credit to payer 
@@ -63,19 +68,19 @@ public class PaymentTransaction implements Serializable {
         return usersAccount;
     }
 
-    public String getPaymentType() {
+    public PaymentType getPaymentType() {
         return paymentType;
     }
 
-    public void setPaymentType(String paymentType) {
+    public void setPaymentType(PaymentType paymentType) {
         this.paymentType = paymentType;
     }
 
-    public String getPaymentStatus() {
+    public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(String paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
     }
 

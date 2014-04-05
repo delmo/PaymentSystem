@@ -6,7 +6,9 @@
 
 package models;
 
+import entities.PaymentStatus;
 import entities.PaymentTransaction;
+import entities.PaymentType;
 import entities.SystemUser;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -20,15 +22,22 @@ public interface TransactionServiceModel {
     
     public List<PaymentTransaction> getPaymentTransactionList();
     
-    public void sendPayment(SystemUser payer, SystemUser payee, String paymentType, 
-            String paymentStatus, BigDecimal amount, Date date);
+    public void saveTransaction(PaymentTransaction transaction);
     
-    public void requestPayment(SystemUser payer, SystemUser payee, String paymentType, 
-            String paymentStatus, BigDecimal amount, Date date);
+    public void saveNewTransaction(PaymentTransaction transaction);
     
-    public List<PaymentTransaction> getPendingTransaction(SystemUser payer);
+    public void updateTransaction(PaymentTransaction transaction);
     
-    public void cancelPayment(Long transactionId);
+    public void removeTransaction(PaymentTransaction transaction);
     
-    public void approvePayment(Long transactionId);
+    public void sendPayment(SystemUser payer, SystemUser payee, PaymentType paymentType, 
+            PaymentStatus paymentStatus, BigDecimal amount, Date date);
+    
+    public void requestPayment(SystemUser payer, SystemUser payee, PaymentType paymentType, 
+            PaymentStatus paymentStatus, BigDecimal amount, Date date);
+    
+    public List<PaymentTransaction> getTransactions(SystemUser user);
+    
+    public PaymentTransaction getTransaction(Long paymentTransactionId);
+       
 }

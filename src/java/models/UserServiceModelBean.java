@@ -50,8 +50,10 @@ public class UserServiceModelBean implements UserServiceModel{
             sys_user = new SystemUser(firstname, lastname, email, paswdToStoreInDB, balance, currency, registrationDate, lastVisit);
             sys_user_group = new UserGroup(email, "users");            
             
-            em.persist(sys_user);
-            em.persist(sys_user_group);            
+            saveUser(sys_user);
+            em.persist(sys_user_group);
+//            em.persist(sys_user);
+//            em.persist(sys_user_group);            
             
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
             Logger.getLogger(UserServiceModelBean.class.getName()).log(Level.SEVERE, null, ex);

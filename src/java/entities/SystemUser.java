@@ -77,6 +77,7 @@ public class SystemUser implements Serializable {
     
     private String currency;
     
+    @Column(name="BALANCE", scale = 2, precision = 13)
     private BigDecimal balance;
 
     public SystemUser() {
