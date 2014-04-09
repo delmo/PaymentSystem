@@ -30,7 +30,7 @@ import javax.ws.rs.client.WebTarget;
 public class CurrencyClientBean implements Serializable{
     private WebTarget webTarget;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/CurrencyConverter/";
+    private static final String BASE_URI = "http://localhost:8080/PaymentSystem/";
     private String currency1;
     private String currency2;
     private String amount;

@@ -37,7 +37,8 @@
 
 
         <br/><br /><br />
-        <h:link value="Show transactions" outcome="transaction" onclick="#{transactionBean.showAllTransactions()}"/>
+        <h:link value="Show transactions" outcome="transaction" onclick="#{transactionBean.showAllTransactions()}"/><br />
+        <h:link value="Notification" outcome="notify" onclick="#{transactionBean.getUserTransactions(userBean.user)}"/>
           
 
     </h:body>

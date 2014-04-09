@@ -2,43 +2,72 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <h:head>
         <title>Transaction Page</title>
     </h:head>
     <h:body>
         <h:link value="Back" outcome="show" /><br/><br/>
         <h:outputText value="List of trasactions" />
-        <h:dataTable value="#{transactionBean.transactionList}" var="transaction">            
-            <h:column>
-                <f:facet name="header">Date</f:facet>
-                    #{transaction.date}                               
-            </h:column>
-            <h:column>
-                <f:facet name="header">Payment Type</f:facet>
-                    #{transaction.paymentType}                               
-            </h:column>
-            <h:column>
-                <f:facet name="header">Amount</f:facet>
-                    #{transaction.amount.doubleValue()}                               
-            </h:column>
-            <h:column>
-                <f:facet name="header">From</f:facet>
-                    #{transaction.payer.firstname}                               
-            </h:column>
-            <h:column>
-                <f:facet name="header">To</f:facet>
-                    #{transaction.payee.firstname}                               
-            </h:column>
-            <h:column>
-                <f:facet name="header">Action</f:facet>
-                <h:form>
-                    <h:commandLink action="approve" value="accept"
-                                   actionListener="#{transactionBean.confirmAccept(transaction.id)}" /> 
-                    <h:commandLink action="approve" value="accept"
-                                   actionListener="#{transactionBean.confirmReject(transaction.id)}" />
-                </h:form>                
-            </h:column>
+        <h:dataTable value="#{transactionBean.transactionList}" var="transaction">     
+            <c:if test="#{transaction.paymentStatus eq transactionBean.completed}">
+                <h:column>
+                    <f:facet name="header">Date</f:facet>
+                        #{transaction.date}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Payment Type</f:facet>
+                        #{transaction.paymentType}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Amount</f:facet>
+                        #{transaction.amount.doubleValue()}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">From</f:facet>
+                        #{transaction.payer.firstname}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">To</f:facet>
+                        #{transaction.payee.firstname}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Action</f:facet>
+                    <h:form>
+                        <h:commandLink action="approve" value="accept"
+                                       actionListener="#{transactionBean.confirmAccept(transaction.id)}" /> 
+                        <h:commandLink action="reject" value="reject"
+                                       actionListener="#{transactionBean.confirmReject(transaction.id)}" />
+                    </h:form>                
+                </h:column>
+            </c:if>
+            <c:otherwise>
+                <h:column>
+                    <f:facet name="header">Date</f:facet>
+                        #{transaction.date}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Status</f:facet>
+                        #{transaction.paymentStatus}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Payment Type</f:facet>
+                        #{transaction.paymentType}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Amount</f:facet>
+                        #{transaction.amount.doubleValue()}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">From</f:facet>
+                        #{transaction.payer.firstname}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">To</f:facet>
+                        #{transaction.payee.firstname}                               
+                </h:column>
+            </c:otherwise>
         </h:dataTable> 
     </h:body>
 </html>

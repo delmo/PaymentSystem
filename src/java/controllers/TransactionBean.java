@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import javax.ejb.EJB;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ViewScoped;
@@ -50,16 +51,26 @@ public class TransactionBean implements Serializable {
     private String parsedAmount;
     private Date date;
     private PaymentTransaction paymentTransaction;
-    private List<PaymentTransaction> transactionList;
+    private List<PaymentTransaction> transactionList;    
+    
+    private PaymentStatus completed;
 
+    public PaymentStatus getCompleted() {
+        completed = PaymentStatus.COMPLETED;
+        return completed;
+    }
+
+    
+    
     public List<PaymentTransaction> showAllTransactions() {
         transactionList = transactionService.getPaymentTransactionList();
         return transactionList;
     }
-//    public List<PaymentTransaction> getUserTransactions(SystemUser user){
-//        this.transactionList = transactionService.getTransactions(user);              
-//        return this.transactionList;
-//    }
+    
+    public List<PaymentTransaction> getUserTransactions(SystemUser user){
+        this.transactionList = transactionService.getTransactions(user);              
+        return this.transactionList;
+    }
 
     public String submitPayment(SystemUser payer) {
 

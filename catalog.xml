@@ -2,4 +2,6 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
     <system systemId="http://localhost:8080/TimestampWSApplication/TimestampWSApplication?wsdl" uri="src/conf/xml-resources/web-service-references/TimestampWSApplication/wsdl/localhost_8080/TimestampWSApplication/TimestampWSApplication.wsdl"/>
     <system systemId="http://localhost:8080/TimestampWSApplication/TimestampWSApplication?xsd=1" uri="src/conf/xml-resources/web-service-references/TimestampWSApplication/wsdl/localhost_8080/TimestampWSApplication/TimestampWSApplication.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/TimestampWS/TimestampWS?wsdl" uri="src/conf/xml-resources/web-service-references/TimestampWS/wsdl/localhost_8080/TimestampWS/TimestampWS.wsdl"/>
+    <system systemId="http://localhost:8080/TimestampWS/TimestampWS?xsd=1" uri="src/conf/xml-resources/web-service-references/TimestampWS/wsdl/localhost_8080/TimestampWS/TimestampWS.xsd_1.xsd"/>
 </catalog>

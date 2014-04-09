@@ -10,6 +10,23 @@
                 JAX-WS WSGEN SECTION
                 ===================
             -->
+    <target name="wsgen-init" depends="init, -do-compile">
+        <mkdir dir="${build.generated.sources.dir}/jax-ws/resources/"/>
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${build.classes.dir}/META-INF"/>
+        <property name="j2ee.platform.wsgen.classpath" value="${libs.jaxws21.classpath}"/>
+        <taskdef name="wsgen" classname="com.sun.tools.ws.ant.WsGen">
+            <classpath path="${java.home}/../lib/tools.jar:${build.classes.dir}:${j2ee.platform.wsgen.classpath}:${javac.classpath}"/>
+        </taskdef>
+    </target>
+    <target name="wsgen-TimestampWS" depends="wsgen-init">
+        <copy todir="${build.classes.dir}/META-INF">
+            <fileset dir="${webinf.dir}" includes="wsit-timestamp.TimestampWS.xml"/>
+        </copy>
+        <wsgen sourcedestdir="${build.generated.sources.dir}/jax-ws" resourcedestdir="${build.generated.sources.dir}/jax-ws/resources/" destdir="${build.generated.sources.dir}/jax-ws" verbose="true" keep="true" genwsdl="true" sei="timestamp.TimestampWS" xendorsed="true">
+            <classpath path="${java.home}/../lib/tools.jar:${build.classes.dir}:${j2ee.platform.wsgen.classpath}:${javac.classpath}"/>
+        </wsgen>
+    </target>
     <!--
                 ===================
                 JAX-WS WSIMPORT SECTION
@@ -26,21 +43,21 @@
             <isset property="conf.dir"/>
         </condition>
     </target>
-    <target name="wsimport-client-TimestampWSApplication" depends="wsimport-init">
-        <mkdir dir="${build.generated.dir}/jax-wsCache/TimestampWSApplication"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/TimestampWSApplication" destdir="${build.generated.dir}/jax-wsCache/TimestampWSApplication" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/TimestampWSApplication/wsdl/localhost_8080/TimestampWSApplication/TimestampWSApplication.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/TimestampWSApplication/TimestampWSApplication?wsdl" xnocompile="true" xendorsed="true">
-            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/TimestampWSApplication/wsdl/localhost_8080/TimestampWSApplication/TimestampWSApplication.wsdl"/>
-            <produces dir="${build.generated.dir}/jax-wsCache/TimestampWSApplication"/>
+    <target name="wsimport-client-TimestampWS" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/TimestampWS"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/TimestampWS" destdir="${build.generated.dir}/jax-wsCache/TimestampWS" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/TimestampWS/wsdl/localhost_8080/TimestampWS/TimestampWS.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/TimestampWS/TimestampWS?wsdl" xnocompile="true" xendorsed="true" package="controllers">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/TimestampWS/wsdl/localhost_8080/TimestampWS/TimestampWS.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/TimestampWS"/>
         </wsimport>
         <copy todir="${build.generated.sources.dir}/jax-ws">
-            <fileset dir="${build.generated.dir}/jax-wsCache/TimestampWSApplication">
+            <fileset dir="${build.generated.dir}/jax-wsCache/TimestampWS">
                 <include name="**/*.java"/>
             </fileset>
         </copy>
     </target>
-    <target name="wsimport-client-clean-TimestampWSApplication" depends="-init-project">
-        <delete dir="${build.generated.sources.dir}/jax-ws/org/me/timestamp"/>
-        <delete dir="${build.generated.dir}/jax-wsCache/TimestampWSApplication"/>
+    <target name="wsimport-client-clean-TimestampWS" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/controllers"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/TimestampWS"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-TimestampWSApplication"/>
+    <target name="wsimport-client-generate" depends="wsimport-client-TimestampWS"/>
 </project>
