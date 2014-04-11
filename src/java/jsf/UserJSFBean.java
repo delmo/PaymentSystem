@@ -4,10 +4,14 @@
  * and open the template in the editor.
  */
 
-package controllers;
+package jsf;
 
+import ejb.UserBean;
+import entities.SystemUser;
 import java.io.Serializable;
-import javax.enterprise.context.RequestScoped;
+import javax.ejb.EJB;
+import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -19,11 +23,37 @@ import javax.servlet.http.HttpServletRequest;
  * @author Rhayan
  */
 @Named
-@RequestScoped
-public class LoginBean implements Serializable{
+@SessionScoped
+public class UserJSFBean implements Serializable{
+    
+    @EJB
+    UserBean userBean;
     
     private String email;
     private String password;
+    private SystemUser user;
+    private String name;
+
+    public UserBean getUserBean() {
+        return userBean;
+    }
+
+    public void setUserBean(UserBean userBean) {
+        this.userBean = userBean;
+    }
+
+    public String getName() {
+        name = userBean.getUser(email).getFirstname();
+        return name;
+    }    
+
+    public SystemUser getUser() {        
+        return userBean.getUser(email);
+    }
+
+    public void setUser(SystemUser user) {
+        this.user = user;
+    }
 
     public String getEmail() {
         return email;
@@ -48,8 +78,9 @@ public class LoginBean implements Serializable{
         System.out.println("Password: " + password);
         try {
             //this method will actually check in the realm for the provided credentials
-           request.login(this.email, this.password);
-           
+            request.login(this.email, this.password);
+            
+
         } catch (ServletException e) {
             context.addMessage(null, new FacesMessage("Login failed."));
             return "error";
@@ -57,7 +88,7 @@ public class LoginBean implements Serializable{
         return "/faces/users/show.xhtml";
     }
 
-    public void logout() {
+    public String logout() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
         try {
@@ -67,6 +98,7 @@ public class LoginBean implements Serializable{
         } catch (ServletException e) {
             context.addMessage(null, new FacesMessage("Logout failed."));
         }
+        return "/faces/index.xhtml";
     }
     
 }

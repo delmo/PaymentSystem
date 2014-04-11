@@ -4,11 +4,9 @@
  * and open the template in the editor.
  */
 
-package controllers;
+package jsf;
 
-import models.UserServiceModel;
-import java.math.BigDecimal;
-import java.util.Date;
+import ejb.UserBean;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
@@ -22,33 +20,28 @@ import javax.inject.Named;
 public class RegistrationBean {
     
     @EJB
-    UserServiceModel usrSrv;
+    UserBean usrSrv;
     
     String email;
     String password;
     String firstname;
-    String lastname;
-    BigDecimal balance;
-    String currency;
-    Date registrationDate;
-    Date lastVisit;    
+    String lastname;    
+    String currency;    
 
     public RegistrationBean() {
     }
     
     //call the injected EJB
     public String register() {        
-        registrationDate = new Date();
-        balance = new BigDecimal(1000000000);
-        usrSrv.registerUser(firstname, lastname, email, password, balance, currency, registrationDate, registrationDate);
+        usrSrv.registerUser(firstname, lastname, email, password, currency);
         return "index";
     }
     
-    public UserServiceModel getUsrSrv() {
+    public UserBean getUsrSrv() {
         return usrSrv;
     }
 
-    public void setUsrSrv(UserServiceModel usrSrv) {
+    public void setUsrSrv(UserBean usrSrv) {
         this.usrSrv = usrSrv;
     }
 
@@ -82,31 +75,7 @@ public class RegistrationBean {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-    }
-
-    public Date getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(Date registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public Date getLastVisit() {
-        return lastVisit;
-    }
-
-    public void setLastVisit(Date lastVisit) {
-        this.lastVisit = lastVisit;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
+    }   
 
     public String getCurrency() {
         return currency;

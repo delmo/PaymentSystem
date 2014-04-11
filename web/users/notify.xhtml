@@ -9,36 +9,41 @@
     <h:body>
         <h:link value="Back" outcome="show" /><br/><br/>
         <h:outputText value="List of trasactions" />
-        <h:dataTable value="#{transactionBean.transactionList}" var="transaction">
-            <h:column>
-                <f:facet name="header">Date</f:facet>
-                    #{transaction.date}                               
-            </h:column>
-            <h:column>
-                <f:facet name="header">Payment Type</f:facet>
-                    #{transaction.paymentType}                               
-            </h:column>
-            <h:column>
-                <f:facet name="header">Amount</f:facet>
-                    #{transaction.amount.doubleValue()}                               
-            </h:column>
-            <h:column>
-                <f:facet name="header">From</f:facet>
-                    #{transaction.payer.firstname}                               
-            </h:column>
-            <h:column>
-                <f:facet name="header">To</f:facet>
-                    #{transaction.payee.firstname}                               
-            </h:column>
-            <h:column>
-                <f:facet name="header">Action</f:facet>
-                <h:form>
-                    <h:commandLink action="approve" value="accept"
-                                   actionListener="#{transactionBean.confirmAccept(transaction.id)}" /> 
-                    <h:commandLink action="reject" value="reject"
-                                   actionListener="#{transactionBean.confirmReject(transaction.id)}" />
-                </h:form>                
-            </h:column>
+        <h:dataTable value="#{transactionJSFBean.userTransactions(userJSFBean.email)}" var="transaction">           
+                <h:column>
+                    <f:facet name="header">Date</f:facet>
+                        #{transaction.date}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Payment Type</f:facet>
+                        #{transaction.paymentType}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Amount</f:facet>
+                        #{transaction.amount.doubleValue()}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">From</f:facet>
+                        #{transaction.payer.firstname}                               
+                </h:column>
+                <h:column>
+                    <f:facet name="header">To</f:facet>
+                        #{transaction.payee.firstname}                               
+                </h:column>
+                <h:column>
+
+                    <f:facet name="header">Action</f:facet>
+                    <h:form>
+                        <h:commandButton value="Accept"
+                                       action="#{transactionJSFBean.accept(transaction.id)}" 
+                                       onclick="if (!confirm('Are you sure you want to accept the payment?'))
+                                         return false"/> 
+                      <h:commandButton value="Reject"
+                                       action="#{transactionJSFBean.reject(transaction.id)}" 
+                                       onclick="if (!confirm('Are you sure you want to reject the payment?'))
+                                         return false"/>
+                    </h:form>                
+                </h:column>            
         </h:dataTable> 
     </h:body>
 </html>

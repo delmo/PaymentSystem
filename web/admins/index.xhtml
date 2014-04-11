@@ -6,12 +6,12 @@
         <title>Admin Page</title>
     </h:head>
     <h:body>
-        <h:outputText value="Hello, #{userBean.user.firstname}!" /><br/>
+        <h:outputText value="Hello, #{userJSFBean.name}!" /><br/>
+        <h:link value="Go back to Payment System" outcome="#{adminJSFBean.userpage()}" /><br/>
         <h:link value="Logout" outcome="logout"/><br/><br/><br/>
-        Choose the following links:
+        Choose the following links:<br/>
         <h:link value="Show all users of the system" outcome="users"/><br/>
-        <h:link value="Show all completed trasactions" outcome="completed"/><br/>
-        <h:link value="Show all pending trasactions" outcome="pending"/><br/>
+        <h:link value="Show all trasactions" outcome="transactions"/><br/>        
     </h:body>
 </html>
 

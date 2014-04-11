@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package models;
+package dao;
 
 import entities.SystemUser;
 import java.math.BigDecimal;

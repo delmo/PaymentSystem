@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package ejb;
 
 import entities.PaymentStatus;
 import entities.PaymentTransaction;
@@ -15,29 +15,22 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import javax.ejb.EJB;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-import models.TransactionServiceModel;
-import models.UserServiceModel;
+import dao.TransactionServiceModel;
+import dao.UserServiceModel;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 /**
  *
  * @author Rhayan
  */
-@Named
-@SessionScoped
-public class TransactionBean implements Serializable {
+@Stateless
+public class TransactionBean{
 
-    @EJB
+    @Inject
     UserServiceModel userService;
 
-    @EJB
+    @Inject
     TransactionServiceModel transactionService;
 
     private String email;
@@ -58,31 +51,29 @@ public class TransactionBean implements Serializable {
     public PaymentStatus getCompleted() {
         completed = PaymentStatus.COMPLETED;
         return completed;
-    }
-
-    
+    }    
     
     public List<PaymentTransaction> showAllTransactions() {
-        transactionList = transactionService.getPaymentTransactionList();
+        transactionList = transactionService.getTransactions();
         return transactionList;
     }
     
-    public List<PaymentTransaction> getUserTransactions(SystemUser user){
-        this.transactionList = transactionService.getTransactions(user);              
+    public List<PaymentTransaction> getUserTransactions(String user_email){
+        this.transactionList = transactionService.getTransactionsByUser(userService.findUser(user_email));              
         return this.transactionList;
     }
 
-    public String submitPayment(SystemUser payer) {
+    public void submitPayment(String payer_email, String payee_email, BigDecimal amount, String currency) {
 
-        this.payee = userService.findUser(getEmail());
-        this.payer = payer;
+        this.payee = userService.findUser(payee_email);
+        this.payer = userService.findUser(payer_email);
 
         System.out.println("Payee email: " + payee.getEmail());
         System.out.println("Payer email: " + payer.getEmail());
 
         if (this.payee != null) {
             if (payer.getBalance().compareTo(amount) == 1) {
-                transactionService.sendPayment(this.payer, this.payee, PaymentType.DEBIT, PaymentStatus.COMPLETED, amount, date);
+                transactionService.sendPayment(this.payer, this.payee, PaymentType.DEBIT, PaymentStatus.COMPLETED, amount, new Date());
 
                 BigDecimal payee_new_balance = this.payee.getBalance().add(amount);
                 BigDecimal payer_new_balance = this.payer.getBalance().subtract(amount);
@@ -92,40 +83,29 @@ public class TransactionBean implements Serializable {
 
                 System.out.println("Payee new balance: " + payee.getBalance());
                 System.out.println("Payer new balance: " + payer.getBalance());
+                
+                userService.updateUser(this.payer);
+                userService.updateUser(this.payee);
             }
         }
-        return "transfer_confirmation";
+        //return "transfer_confirmation";
     }
 
-    public String requestPayment(SystemUser payee) {
+    public void requestPayment(String payer_email, String payee_email, BigDecimal amount, String currency) {
 
-        this.payer = userService.findUser(email);
-        this.payee = payee;
+        payer = userService.findUser(payer_email);
+        payee = userService.findUser(payee_email);
 
         System.out.println("Payee email: " + payee.getEmail());
         System.out.println("Payer email: " + payer.getEmail());
 
-        if (this.payer != null) {
-            if (this.payer.getBalance().compareTo(amount) == 1) {
-                return "request_confirmation";            
-            }            
-        }
-        return "show";
+        transactionService.sendPayment(payer, payee, PaymentType.CREDIT, PaymentStatus.PENDING, amount, new Date());
     }
 
-    public String confirmTransaction() {
-        userService.updateUser(this.payer);
-        userService.updateUser(this.payee);
-        return "show";
-    }
     
-    public String confirmRequest(){
-        transactionService.sendPayment(this.payer, this.payee, PaymentType.CREDIT, PaymentStatus.PENDING, amount, date);           
-        return "show";
-    }
 
-    public String approvePendingTransaction() {
-        paymentTransaction = transactionService.getTransaction(transactionId);
+    public void approvePendingTransaction(Long id) {
+        paymentTransaction = transactionService.getTransaction(id);
         
         this.payer = paymentTransaction.getPayer();
         this.payee = paymentTransaction.getPayee();
@@ -141,28 +121,17 @@ public class TransactionBean implements Serializable {
 
         userService.updateUser(this.payer);
         userService.updateUser(this.payee);
+        
         paymentTransaction.setPaymentStatus(PaymentStatus.COMPLETED);
-        transactionService.saveTransaction(paymentTransaction);
-
-        return "show";
+        transactionService.saveTransaction(paymentTransaction);       
     }
 
-    public String cancelTransaction() {
-        paymentTransaction = transactionService.getTransaction(transactionId);
+    public void cancelTransaction(Long id) {
+        paymentTransaction = transactionService.getTransaction(id);
         paymentTransaction.setPaymentStatus(PaymentStatus.REJECTED);
-        transactionService.saveTransaction(paymentTransaction);
-        return "show";
-    }
-
-    public String confirmReject(Long id){
-        setTransactionId(id);
-        return "reject";
+        transactionService.saveTransaction(paymentTransaction);        
     }
     
-    public String confirmAccept(Long id){
-        setTransactionId(id);
-        return "approve";
-    }
     public UserServiceModel getUserService() {
         return userService;
     }

@@ -9,10 +9,10 @@
         <center>
             <h2>Hello, please log in:</h2>
             <h:form>
-                Username: <h:inputText value="#{userBean.email}"/>
-                Password: <h:inputSecret value="#{userBean.password}"/>
+                Username: <h:inputText value="#{userJSFBean.email}"/>
+                Password: <h:inputSecret value="#{userJSFBean.password}"/>
                 <br/>
-                <h:commandButton value="Submit" action="#{userBean.login}"/>
+                <h:commandButton value="Submit" action="#{userJSFBean.login}"/>
                 <h:commandButton value="Reset" type="reset"/>
             </h:form>
             <br/>

@@ -3,36 +3,40 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package ejb;
 
-package controllers;
-
-import models.UserServiceModel;
+import dao.UserServiceModel;
 import entities.SystemUser;
-import java.io.Serializable;
+import entities.UserGroup;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
+import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-
 
 /**
  *
  * @author Rhayan
  */
-@Named
-@SessionScoped
-public class UserBean implements Serializable{
-    
+@Stateless
+public class UserBean{
+
     private Long id;
     private SystemUser user;
     private String firstname;
@@ -43,18 +47,74 @@ public class UserBean implements Serializable{
     private String currency;
     private Date registrationDate;
     private Date updateDate;
-    final static Logger myLogger = Logger.getLogger("javax.enterprise.resource.webcontainer.jsf");
+    private List<SystemUser> userlist;
+
     
-    @EJB
+    final static Logger myLogger = Logger.getLogger("javax.enterprise.resource.webcontainer.jsf");
+
+    @Inject
     private UserServiceModel userStore;
     
+    @Inject
+    private TimestampClientBean timer;
+    
+    @Inject
+    private CurrencyClientBean forex;
+    
+    @PersistenceContext(unitName = "PaymentSystemPU")
+    EntityManager em;
+    
+
     public UserBean() {
         user = new SystemUser();
     }
 
-     public String saveCustomer() {
-        String returnValue = "customer_saved";
+    public void registerUser(String firstname, String lastname, String email, 
+            String password, String currency){
+        try {
+            SystemUser sys_user;
+            UserGroup sys_user_group;
+            
+            //formater.parse(timer.getDateTimeNow())
+            SimpleDateFormat formater = new SimpleDateFormat("MM/dd/YYYY HH:mm");
+            //Date today = formater.parse(timer.getDateTimeNow());
+            Date today = new Date();
+            
+            //1000000.00 GBP = 1670000.0000 USD
+            String json_money = forex.getConversion(currency, "USD", "1000000");            
+            String[] parse_money = json_money.split(" ");
+            BigDecimal initialDeposit = new BigDecimal(parse_money[3]);
+            
+
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            String passwd = password;
+            md.update(passwd.getBytes("UTF-8")); // Change this to "UTF-16" if needed
+            byte[] digest = md.digest();
+            BigInteger bigInt = new BigInteger(1, digest);
+            String paswdToStoreInDB = bigInt.toString(16);
+
+            sys_user = new SystemUser(firstname, lastname, email, paswdToStoreInDB, initialDeposit, currency, 
+                    today, today);
+            sys_user_group = new UserGroup(email, "users");            
+            
+            userStore.saveUser(sys_user);
+            em.persist(sys_user_group);
+      
+            
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
+            Logger.getLogger(UserBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
+       
+    }
+    
+    public List<SystemUser> getUserlist() {
+        return userlist = userStore.getUserList();
+    }
+    
+    public String saveCustomer() {
+        String returnValue = "customer_saved";
+
         try {
             populateCustomer();
             userStore.saveUser(user);
@@ -62,10 +122,10 @@ public class UserBean implements Serializable{
             e.printStackTrace();
             returnValue = "error_saving_customer";
         }
-        
+
         return returnValue;
     }
-    
+
     private void populateCustomer() {
         if (user == null) {
             user = new SystemUser();
@@ -74,8 +134,7 @@ public class UserBean implements Serializable{
         user.setLastname(getLastname());
         user.setEmail(getEmail());
     }
-       
-    
+
     public String getFirstname() {
         return firstname;
     }
@@ -147,22 +206,22 @@ public class UserBean implements Serializable{
     public void setId(Long id) {
         this.id = id;
     }
-    
-    public String searchByEmail(){
+
+    public String searchByEmail() {
 //        user = userStore.getUser(this.id);
         user = userStore.findUser(this.email);
         //return "showuser";
         return "/faces/users/show.xhtml";
     }
 
-    public SystemUser getUser() {
-        return user;
+    public SystemUser getUser(String email) {        
+        return userStore.findUser(email);
     }
 
     public void setUser(SystemUser user) {
         this.user = user;
     }
-    
+
     public String login() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -170,8 +229,8 @@ public class UserBean implements Serializable{
         System.out.println("Password: " + password);
         try {
             //this method will actually check in the realm for the provided credentials
-           request.login(this.email, this.password);
-           
+            request.login(this.email, this.password);
+
         } catch (ServletException e) {
             context.addMessage(null, new FacesMessage("Login failed."));
             return "error";
@@ -191,12 +250,12 @@ public class UserBean implements Serializable{
         }
         return "/faces/index.xhtml";
     }
-    
+
     @PostConstruct
     public void postConstruct() {
         System.out.println("UserBean: PostConstruct");
     }
-    
+
     @PreDestroy
     public void preDestroy() {
         System.out.println("UserBean: PreDestroy");

@@ -3,18 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package models;
+package dao;
 
 import entities.PaymentStatus;
 import entities.PaymentTransaction;
 import entities.PaymentType;
 import entities.SystemUser;
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,13 +22,13 @@ import javax.persistence.Query;
  * @author Rhayan
  */
 @Stateless
-public class TransactionServiceModelBean implements TransactionServiceModel{
+public class TransactionServiceModelBean implements TransactionServiceModel {
 
     @PersistenceContext
     EntityManager em;
 
     @Override
-    public List<PaymentTransaction> getPaymentTransactionList() {
+    public List<PaymentTransaction> getTransactions() {
         List<PaymentTransaction> transactions;
         Query q = em.createQuery("SELECT t FROM PaymentTransaction t ", PaymentTransaction.class);
         transactions = q.getResultList();
@@ -40,7 +37,7 @@ public class TransactionServiceModelBean implements TransactionServiceModel{
 
     @Override
     public void sendPayment(SystemUser payer, SystemUser payee, PaymentType paymentType, PaymentStatus paymentStatus, BigDecimal amount, Date date) {
-        
+
         PaymentTransaction newTransaction;
         newTransaction = new PaymentTransaction(payer, payee, paymentType, paymentStatus, amount, date);
         saveTransaction(newTransaction);
@@ -54,29 +51,29 @@ public class TransactionServiceModelBean implements TransactionServiceModel{
     }
 
     @Override
-    public List<PaymentTransaction> getTransactions(SystemUser payer) {
+    public List<PaymentTransaction> getTransactionsByUser(SystemUser payer) {
         List<PaymentTransaction> transactions;
         //String status = "pending";
-        Query q = em.createQuery("SELECT t FROM PaymentTransaction t WHERE t.payer = :payer AND t.paymentStatus = 'pending'", PaymentTransaction.class);
-        
+        Query q = em.createQuery("SELECT t FROM PaymentTransaction t WHERE t.payer = :payer", PaymentTransaction.class);
+
         transactions = q.setParameter("payer", payer).getResultList();
-        
+        //transactions = q.getResultList();
+
         return transactions;
     }
 
-
     @Override
     public void saveTransaction(PaymentTransaction transaction) {
-        if(transaction.getId() == null){
+        if (transaction.getId() == null) {
             saveNewTransaction(transaction);
-        }else{
+        } else {
             updateTransaction(transaction);
         }
     }
 
     @Override
     public void saveNewTransaction(PaymentTransaction transaction) {
-         em.persist(transaction);
+        em.persist(transaction);
     }
 
     @Override
@@ -92,11 +89,21 @@ public class TransactionServiceModelBean implements TransactionServiceModel{
     @Override
     public PaymentTransaction getTransaction(Long paymentTransactionId) {
         PaymentTransaction transaction;
-        
+
         transaction = em.find(PaymentTransaction.class, paymentTransactionId);
-        
+
         return transaction;
     }
-   
-    
+
+    @Override
+    public List<PaymentTransaction> getTransactionByStatus(PaymentStatus status) {
+        List<PaymentTransaction> transactions;
+        
+        Query q = em.createQuery("SELECT t FROM PaymentTransaction t WHERE t.paymentStatus = :status", PaymentTransaction.class);
+
+        transactions = q.setParameter("paymentStatus", status).getResultList();        
+
+        return transactions;
+    }
+
 }

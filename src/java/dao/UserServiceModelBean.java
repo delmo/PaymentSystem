@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package models;
+package dao;
 
 import entities.UserGroup;
 import entities.SystemUser;
@@ -29,7 +29,7 @@ import javax.persistence.Query;
 @Stateless
 public class UserServiceModelBean implements UserServiceModel{
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "PaymentSystemPU")
     EntityManager em;
 
     @Override

@@ -9,7 +9,8 @@
     <h:body>
         <center>
             <h:outputText value="Welcome to Payment System" styleClass="header" /><br/>
-            <h:outputText value="#{timestampClientBean.dateTimeNow}" /> 
+            <h:outputText value="#{dateServiceClient.timenow}" />
+            
             <br/>
             <h4>Please login or register to use this service.</h4>
             <h:link value="login" outcome="login"/>

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package controllers;
+package ejb;
 
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;

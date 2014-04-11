@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package models;
+package dao;
 
 import entities.PaymentStatus;
 import entities.PaymentTransaction;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public interface TransactionServiceModel {    
     
-    public List<PaymentTransaction> getPaymentTransactionList();
+    public List<PaymentTransaction> getTransactions();
     
     public void saveTransaction(PaymentTransaction transaction);
     
@@ -36,7 +36,9 @@ public interface TransactionServiceModel {
     public void requestPayment(SystemUser payer, SystemUser payee, PaymentType paymentType, 
             PaymentStatus paymentStatus, BigDecimal amount, Date date);
     
-    public List<PaymentTransaction> getTransactions(SystemUser user);
+    public List<PaymentTransaction> getTransactionsByUser(SystemUser user);
+    
+    public List<PaymentTransaction> getTransactionByStatus(PaymentStatus status);    
     
     public PaymentTransaction getTransaction(Long paymentTransactionId);
        
