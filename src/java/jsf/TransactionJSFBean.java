@@ -9,9 +9,12 @@ package jsf;
 import ejb.TransactionBean;
 import entities.PaymentStatus;
 import entities.PaymentTransaction;
+import entities.SystemUser;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import javax.ejb.EJB;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.RequestScoped;
@@ -24,16 +27,17 @@ import javax.inject.Named;
  * @author Rhayan
  */
 @Named
-@SessionScoped
+@RequestScoped
 public class TransactionJSFBean implements Serializable {
     
     @EJB
     private TransactionBean transactionBean;
     
-    private String payer_email;
-    private String payee_email;
+    private String my_email;
+    private String other_email;
     private String currency;
-    private BigDecimal amount;
+    private BigDecimal amount;  
+    private String formatedBalance;
     private List<PaymentTransaction> transactions;
     private PaymentStatus pending = PaymentStatus.PENDING;
     private Long transactionId;
@@ -48,8 +52,7 @@ public class TransactionJSFBean implements Serializable {
 
     public PaymentStatus getPending() {
         return pending;
-    }
-    
+    }    
     
     public List<PaymentTransaction> getTransactions() {        
         return transactions;
@@ -60,23 +63,35 @@ public class TransactionJSFBean implements Serializable {
         return "transaction";
     }
     
-    public List<PaymentTransaction> userTransactions(String user_email){
-        return transactionBean.getUserTransactions(user_email);
+    public List<PaymentTransaction> userTransactions(SystemUser user){
+        transactions = transactionBean.getUserTransactions(user);
+        return transactions;
     }
+    
+    public List<PaymentTransaction> showPendingTransactions(SystemUser user){
+        transactions = transactionBean.getPendingTransactions(user);
+        return transactions;
+    }
+    
+    public int countPendingTrasanction(SystemUser u){
+        
+        return showPendingTransactions(u).size();
+    }
+    
     public void setTransactions(List<PaymentTransaction> transactions) {
         this.transactions = transactions;
     }
     
     public String pay(String user_email){
-        this.payer_email = user_email;
-        transactionBean.submitPayment(this.payer_email, this.payee_email, amount, currency);
+        this.my_email = user_email;
+        transactionBean.submitPayment(this.my_email, this.other_email, amount, currency);
         //return "transfer_confirmation";
         return "show";
     }
     
-    public String request(String user_email){
-        this.payee_email = user_email;
-        transactionBean.requestPayment(this.payer_email, this.payee_email, amount, currency);
+    public String request(String other){
+        this.my_email = other;
+        transactionBean.requestPayment(this.other_email, this.my_email, amount, currency);
         return "show";
     }
     
@@ -88,22 +103,23 @@ public class TransactionJSFBean implements Serializable {
     public String reject(Long id){
         transactionBean.cancelTransaction(id);
         return "show";
+    }   
+    
+    
+    public String getMy_email() {
+        return my_email;
     }
 
-    public String getPayer_email() {
-        return payer_email;
+    public void setMy_email(String my_email) {
+        this.my_email = my_email;
     }
 
-    public void setPayer_email(String payer_email) {
-        this.payer_email = payer_email;
+    public String getOther_email() {
+        return other_email;
     }
 
-    public String getPayee_email() {
-        return payee_email;
-    }
-
-    public void setPayee_email(String payee_email) {
-        this.payee_email = payee_email;
+    public void setOther_email(String other_email) {
+        this.other_email = other_email;
     }
 
     public String getCurrency() {
@@ -121,6 +137,11 @@ public class TransactionJSFBean implements Serializable {
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
+
+    public String formatBalance(BigDecimal balance) {
+        return NumberFormat.getCurrencyInstance(Locale.US).format(balance);
+    }
+    
     
     
 }

@@ -36,9 +36,9 @@ public interface TransactionServiceModel {
     public void requestPayment(SystemUser payer, SystemUser payee, PaymentType paymentType, 
             PaymentStatus paymentStatus, BigDecimal amount, Date date);
     
-    public List<PaymentTransaction> getTransactionsByUser(SystemUser user);
+    public List<PaymentTransaction> getTransactionsByUser(Long id);
     
-    public List<PaymentTransaction> getTransactionByStatus(PaymentStatus status);    
+    public List<PaymentTransaction> getTransactionByStatus(Long id, PaymentStatus status);    
     
     public PaymentTransaction getTransaction(Long paymentTransactionId);
        

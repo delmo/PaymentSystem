@@ -16,6 +16,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 
@@ -24,6 +26,24 @@ import javax.persistence.Temporal;
  * @author Rhayan
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(
+            name="findAllTransactionById",
+            query="SELECT t FROM PaymentTransaction t WHERE t.payer.Id = :payerId OR t.payee.Id = :payeeId"
+    ),
+    @NamedQuery(
+            name="findAllPending",
+            query="SELECT t FROM PaymentTransaction t WHERE t.paymentStatus = :status"
+    ),
+    @NamedQuery(
+            name="findAllPendingTransaction",
+            query="SELECT t FROM PaymentTransaction t WHERE t.payer.Id = :id AND t.paymentStatus = :status"
+    ),
+    @NamedQuery(
+            name="findAllTransactions",
+            query="SELECT t FROM PaymentTransaction t"
+    )
+})
 public class PaymentTransaction implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,6 +58,10 @@ public class PaymentTransaction implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
+    
+    @Enumerated(EnumType.STRING)
+    private Notification notification;
+    
 
     @Column(name="AMOUNT", scale = 2, precision = 13)
     private BigDecimal amount;
@@ -62,6 +86,7 @@ public class PaymentTransaction implements Serializable {
         this.paymentStatus = paymentStatus; //pending or completed
         this.amount = amount;
         this.date = date;
+        this.notification = Notification.UNREAD;
     }
 
     public Collection<SystemUser> getUsersAccount() {
@@ -122,6 +147,14 @@ public class PaymentTransaction implements Serializable {
 
     public void setPayee(SystemUser payee) {
         this.payee = payee;
+    }
+    
+     public Notification getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Notification notification) {
+        this.notification = notification;
     }
 
     

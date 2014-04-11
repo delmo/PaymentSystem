@@ -58,8 +58,13 @@ public class TransactionBean{
         return transactionList;
     }
     
-    public List<PaymentTransaction> getUserTransactions(String user_email){
-        this.transactionList = transactionService.getTransactionsByUser(userService.findUser(user_email));              
+    public List<PaymentTransaction> getPendingTransactions(SystemUser user){             
+        this.transactionList = transactionService.getTransactionByStatus(user.getId(), PaymentStatus.PENDING);
+        return this.transactionList;
+    }
+    
+    public List<PaymentTransaction> getUserTransactions(SystemUser user){
+        this.transactionList = transactionService.getTransactionsByUser(user.getId());              
         return this.transactionList;
     }
 
@@ -93,13 +98,13 @@ public class TransactionBean{
 
     public void requestPayment(String payer_email, String payee_email, BigDecimal amount, String currency) {
 
-        payer = userService.findUser(payer_email);
-        payee = userService.findUser(payee_email);
+        this.payer = userService.findUser(payer_email);
+        this.payee = userService.findUser(payee_email);
 
         System.out.println("Payee email: " + payee.getEmail());
         System.out.println("Payer email: " + payer.getEmail());
 
-        transactionService.sendPayment(payer, payee, PaymentType.CREDIT, PaymentStatus.PENDING, amount, new Date());
+        transactionService.sendPayment(this.payer, this.payee, PaymentType.CREDIT, PaymentStatus.PENDING, amount, new Date());
     }
 
     

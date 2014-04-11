@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Request Page</title>
+    </h:head>
+    <h:body>
+        <h:link value="Back" outcome="show" /><br/><br/>
+        <br/><br /><br />
+        <h:form>
+            <h:outputText value="To pay someone please fill-in the details below."></h:outputText><br /><br />            
+            <h:outputText value="Enter the email address of the person you are trying to request a payment: "></h:outputText>
+            <h:inputText value="#{transactionJSFBean.other_email}" required="true" label="Email" validatorMessage="The email you supplied is invalid.">
+                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+            </h:inputText><br />
+            <h:outputText value="Enter the amount: "></h:outputText>
+            <h:inputText value="#{transactionJSFBean.amount}"
+                         maxlength="6"
+                         converterMessage="Please enter digits only."
+                         validatorMessage="Please enter 6 digits.">
+                <f:validateLength minimum="1" maximum="6" />
+            </h:inputText><br />
+            <h:outputText value="Choose the currency :"></h:outputText>
+            <h:selectOneMenu value="#{transactionJSFBean.currency}" required="true" requiredMessage="Please Select Currency!">
+                <f:selectItem itemValue="USD" itemLabel="US Dollar" />
+                <f:selectItem itemValue="GBP" itemLabel="British Pound" />
+                <f:selectItem itemValue="EUR" itemLabel="European Euro" />
+                <f:selectItem itemValue="PHP" itemLabel="Philippine Peso" />
+                <f:selectItem itemValue="CAD" itemLabel="Canadian Dollar" />
+                <f:selectItem itemValue="JPY" itemLabel="Japanese Yen" />
+            </h:selectOneMenu><br />
+            <h:commandButton value="Request payment" action="#{transactionJSFBean.request(userJSFBean.email)}" 
+                             onclick="if (!confirm('Are you sure you want to request the payment?'))
+                                         return false"/>           
+        </h:form>
+    </h:body>
+</html>
+

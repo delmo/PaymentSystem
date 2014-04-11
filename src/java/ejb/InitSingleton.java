@@ -53,16 +53,20 @@ public class InitSingleton {
             Logger.getLogger(InitSingleton.class.getName()).log(Level.SEVERE, null, ex);
         }
         Date today = new Date();
-        SystemUser admin = new SystemUser("Ryan", "Delmo", "ryan@delmo.com", paswdToStoreInDB, new BigDecimal("1000000"), "GBP", today, today);
-        SystemUser user = new SystemUser("Jen", "Smith", "jen@example.com", paswdToStoreInDB, new BigDecimal("1000000"), "CAD", today, today);
+        SystemUser admin = new SystemUser("Ryan", "Delmo", "ryan@me.com", paswdToStoreInDB, new BigDecimal("1000000"), "GBP", today, today);
+        SystemUser jen = new SystemUser("Jen", "Smith", "jen@me.com", paswdToStoreInDB, new BigDecimal("1000000"), "CAD", today, today);
+        SystemUser alice = new SystemUser("Alice", "Wonderland", "alice@me.com", paswdToStoreInDB, new BigDecimal("1000000"), "PHP", today, today);
 
         UserGroup admin_group = new UserGroup(admin.getEmail(), "admins");
-        UserGroup user_group = new UserGroup(user.getEmail(), "users");
+        UserGroup user_group1 = new UserGroup(jen.getEmail(), "users");
+        UserGroup user_group2 = new UserGroup(alice.getEmail(), "users");
         
         em.persist(admin);
-        em.persist(user);
+        em.persist(jen);
+        em.persist(alice);
         em.persist(admin_group);
-        em.persist(user_group);
+        em.persist(user_group1);
+        em.persist(user_group2);
         em.flush();
     }
 }

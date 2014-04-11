@@ -71,6 +71,18 @@ public class UserJSFBean implements Serializable{
         this.password = password;
     }
     
+    public String show(){
+        return "show";
+    }
+    
+    public String continuePayment(){
+        return "transfer";
+    }
+    
+    public String continueRequest(){
+        return "request";
+    }
+    
     public String login() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -85,7 +97,7 @@ public class UserJSFBean implements Serializable{
             context.addMessage(null, new FacesMessage("Login failed."));
             return "error";
         }
-        return "/faces/users/show.xhtml";
+        return "/faces/users/index.xhtml";
     }
 
     public String logout() {
