@@ -25,23 +25,23 @@
 
                     <h:outputText value="Email :"></h:outputText>
                     <h:inputText id="email" value="#{registrationBean.email}" required="true"
-                                 requiredMessage="Please Enter Email!"></h:inputText>
-                 
+                                 requiredMessage="Please Enter Email!" validatorMessage="The email you supplied is invalid format.">                         
+                        <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                    </h:inputText>
+
                     <h:outputText value="Password :"></h:outputText>
                     <h:inputSecret id="password" value="#{registrationBean.password}"
                                    required="true" requiredMessage="Please Enter Password!"></h:inputSecret>
-                    
+
                     <h:outputText value="Currency :"></h:outputText>
                     <h:selectOneMenu value="#{registrationBean.currency}" required="true" requiredMessage="Please Select Currency!">
                         <f:selectItem itemValue="USD" itemLabel="US Dollar" />
                         <f:selectItem itemValue="GBP" itemLabel="British Pound" />
-                        <f:selectItem itemValue="EUR" itemLabel="European Euro" />
-                        <f:selectItem itemValue="PHP" itemLabel="Philippine Peso" />
-                        <f:selectItem itemValue="CAD" itemLabel="Canadian Dollar" />
+                        <f:selectItem itemValue="EUR" itemLabel="European Euro" />                        
                         <f:selectItem itemValue="JPY" itemLabel="Japanese Yen" />
                     </h:selectOneMenu>
-                    
-                    
+
+
 
                     <h:commandButton type="submit" value="Submit"
                                      action="#{registrationBean.register}"></h:commandButton>

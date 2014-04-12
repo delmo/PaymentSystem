@@ -22,15 +22,7 @@
                          validatorMessage="Please enter 6 digits.">
                 <f:validateLength minimum="1" maximum="6" />
             </h:inputText><br />
-            <h:outputText value="Choose the currency :"></h:outputText>
-            <h:selectOneMenu value="#{transactionJSFBean.currency}" required="true" requiredMessage="Please Select Currency!">
-                <f:selectItem itemValue="USD" itemLabel="US Dollar" />
-                <f:selectItem itemValue="GBP" itemLabel="British Pound" />
-                <f:selectItem itemValue="EUR" itemLabel="European Euro" />
-                <f:selectItem itemValue="PHP" itemLabel="Philippine Peso" />
-                <f:selectItem itemValue="CAD" itemLabel="Canadian Dollar" />
-                <f:selectItem itemValue="JPY" itemLabel="Japanese Yen" />
-            </h:selectOneMenu><br />
+            
             <h:commandButton value="Submit payment" action="#{transactionJSFBean.pay(userJSFBean.email)}" 
                              onclick="if (!confirm('Are you sure you want to submit the payment?'))
                                          return false"/>           

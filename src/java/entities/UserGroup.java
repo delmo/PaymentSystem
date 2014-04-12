@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
@@ -21,6 +23,12 @@ import javax.validation.constraints.NotNull;
  * @author Rhayan
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(
+            name="findAllAdmins",
+            query="SELECT g.email FROM UserGroup g WHERE g.groupname = 'admins'"
+    )
+})
 public class UserGroup implements Serializable {
 
     @NotNull

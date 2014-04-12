@@ -10,7 +10,6 @@ import ejb.UserBean;
 import entities.SystemUser;
 import java.io.Serializable;
 import javax.ejb.EJB;
-import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -33,6 +32,12 @@ public class UserJSFBean implements Serializable{
     private String password;
     private SystemUser user;
     private String name;
+    private boolean admin;
+
+    public boolean isAdmin() {
+        admin = userBean.isAdmin(email);
+        return admin;
+    }   
 
     public UserBean getUserBean() {
         return userBean;

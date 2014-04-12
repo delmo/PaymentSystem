@@ -34,7 +34,7 @@ public class AdminJSFBean {
     private List<PaymentTransaction> transactions;
 
     public List<PaymentTransaction> getTransactions() {
-        return transactions = transactionBean.getTransactionList();
+        return transactions = transactionBean.showAllTransactions();
     }
 
     public List<SystemUser> getUserlist() {
@@ -48,5 +48,7 @@ public class AdminJSFBean {
     public String userpage(){
         return "/faces/users/show.xhtml";
     }
+    
+    
     
 }

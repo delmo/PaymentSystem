@@ -25,7 +25,7 @@
             </h:column>   
             <h:column>
                 <f:facet name="header">Current Balance</f:facet>
-                    #{user.balance}                               
+                    #{numberHelper.formatBalance(user.balance, user.currency)}                               
             </h:column>
 
         </h:dataTable> 

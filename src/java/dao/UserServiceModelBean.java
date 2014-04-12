@@ -52,8 +52,6 @@ public class UserServiceModelBean implements UserServiceModel{
             
             saveUser(sys_user);
             em.persist(sys_user_group);
-//            em.persist(sys_user);
-//            em.persist(sys_user_group);            
             
         } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
             Logger.getLogger(UserServiceModelBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -84,12 +82,8 @@ public class UserServiceModelBean implements UserServiceModel{
     
     @Override
     public SystemUser findUser(String email) {
-        SystemUser user;
-        Query q = em.createQuery("SELECT u FROM SystemUser u WHERE u.email = :email", SystemUser.class);
-        
-        user = (SystemUser) q.setParameter("email", email).getSingleResult();
-        
-        return user;
+        SystemUser user = (SystemUser)em.createNamedQuery("findAllSystemUsersWithEmail").setParameter("email", email).getSingleResult();
+        return user;        
     }
     
     @Override
@@ -111,54 +105,10 @@ public class UserServiceModelBean implements UserServiceModel{
         em.merge(user);
     }
 
-    
-//    @PostConstruct
-//    public void postConstruct() {
-//        System.out.println("UserStore: PostConstruct");
-//    }
-//
-//    @PreDestroy
-//    public void preDestroy() {
-//        System.out.println("UserStore: PreDestroy");
-//    }
-//    
-    
-    
-//    @PersistenceContext
-//    EntityManager em;
-//
-//    public void enterOrder(int custID, Order newOrder) {
-//        Customer cust = em.find(Customer.class, custID);
-//        cust.getOrders().add(newOrder);
-//        newOrder.setCustomer(cust);
-//    }
-  
+    @Override
+    public List<String> getEmails() {     
+        return em.createNamedQuery("findAllEmails").getResultList();
+    }
 }
-
-
-
-    
-//    @PersistenceUnit
-//    EntityManagerFactory emf;
-//    EntityManager em;
-//    @Resource
-//    UserTransaction utx;
-//    ...
-//em  = emf.createEntityManager();
-//
-//    
-//        try {
-//  utx.begin();
-//        em.persist(SomeEntity);
-//        em.merge(AnotherEntity);
-//        em.remove(ThirdEntity);
-//        utx.commit();
-//    }
-//    catch (Exception e
-//
-//    
-//        ) {
-//  utx.rollback();
-//    }
     
     

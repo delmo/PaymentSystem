@@ -3,14 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html">
     <h:head>
-        <title>Access Denied</title>
+        <title>Transaction Error</title>
     </h:head>
     <h:body>
         <center>
-            <h:outputText value="Access Denied - Check your Email or Password" />
-            <br/>
-            <h:link value="Go back to login page" outcome="login"/>
-        </center>       
+            <h:outputText value="The transaction cannot be continue. Invalid email" /><br/>
+            <h:link value="Back" outcome="show" />
+        </center>        
     </h:body>
 </html>
 

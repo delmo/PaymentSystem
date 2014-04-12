@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jsf;
 
 import java.io.Serializable;
@@ -19,9 +18,28 @@ import javax.inject.Named;
  */
 @Named
 @RequestScoped
-public class NumberHelper implements Serializable{
-    
-    public String formatBalance(BigDecimal balance) {
-        return NumberFormat.getCurrencyInstance(Locale.US).format(balance);
+public class NumberHelper implements Serializable {
+
+    public String formatBalance(BigDecimal balance, String currency) {
+        Locale local;
+        switch (currency) {
+            case "USD":
+                local = Locale.US;
+                break;
+            case "JPY":
+                local = Locale.JAPAN;
+                break;
+            case "GBP":
+                local = Locale.UK;
+                break;
+            case "EUR":
+                local = Locale.ITALY;
+                break;
+            default:
+                local = Locale.US;
+                break;
+        }
+
+        return NumberFormat.getCurrencyInstance(local).format(balance);
     }
 }

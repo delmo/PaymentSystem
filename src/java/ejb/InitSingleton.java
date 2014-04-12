@@ -35,7 +35,7 @@ public class InitSingleton {
 
     @PostConstruct
     public void dbInit() {
-        System.out.println("At startup: Initialising Datbase with two users");
+        System.out.println("At startup: Initialising Database with three users");
         // DB Primary Keys start at 1!
         String password = "password";
         MessageDigest md;
@@ -54,8 +54,8 @@ public class InitSingleton {
         }
         Date today = new Date();
         SystemUser admin = new SystemUser("Ryan", "Delmo", "ryan@me.com", paswdToStoreInDB, new BigDecimal("1000000"), "GBP", today, today);
-        SystemUser jen = new SystemUser("Jen", "Smith", "jen@me.com", paswdToStoreInDB, new BigDecimal("1000000"), "CAD", today, today);
-        SystemUser alice = new SystemUser("Alice", "Wonderland", "alice@me.com", paswdToStoreInDB, new BigDecimal("1000000"), "PHP", today, today);
+        SystemUser jen = new SystemUser("Jen", "Smith", "jen@me.com", paswdToStoreInDB, new BigDecimal("1000000"), "USD", today, today);
+        SystemUser alice = new SystemUser("Alice", "Wonderland", "alice@me.com", paswdToStoreInDB, new BigDecimal("1000000"), "EUR", today, today);
 
         UserGroup admin_group = new UserGroup(admin.getEmail(), "admins");
         UserGroup user_group1 = new UserGroup(jen.getEmail(), "users");

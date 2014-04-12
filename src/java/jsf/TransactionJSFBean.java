@@ -34,10 +34,8 @@ public class TransactionJSFBean implements Serializable {
     private TransactionBean transactionBean;
     
     private String my_email;
-    private String other_email;
-    private String currency;
-    private BigDecimal amount;  
-    private String formatedBalance;
+    private String other_email;    
+    private BigDecimal amount;    
     private List<PaymentTransaction> transactions;
     private PaymentStatus pending = PaymentStatus.PENDING;
     private Long transactionId;
@@ -84,15 +82,18 @@ public class TransactionJSFBean implements Serializable {
     
     public String pay(String user_email){
         this.my_email = user_email;
-        transactionBean.submitPayment(this.my_email, this.other_email, amount, currency);
-        //return "transfer_confirmation";
-        return "show";
+        if(transactionBean.submitPayment(this.my_email, this.other_email, amount)){
+            return "show";
+        }        
+        return "error";
     }
     
     public String request(String other){
-        this.my_email = other;
-        transactionBean.requestPayment(this.other_email, this.my_email, amount, currency);
-        return "show";
+        this.my_email = other;        
+        if(transactionBean.requestPayment(this.other_email, this.my_email, amount)){
+            return "show";
+        }
+        return "error";
     }
     
     public String accept(Long id){
@@ -120,15 +121,7 @@ public class TransactionJSFBean implements Serializable {
 
     public void setOther_email(String other_email) {
         this.other_email = other_email;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
+    }   
 
     public BigDecimal getAmount() {
         return amount;
@@ -136,12 +129,6 @@ public class TransactionJSFBean implements Serializable {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public String formatBalance(BigDecimal balance) {
-        return NumberFormat.getCurrencyInstance(Locale.US).format(balance);
-    }
-    
-    
+    }   
     
 }

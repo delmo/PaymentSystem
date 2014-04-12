@@ -29,10 +29,7 @@ public class TransactionServiceModelBean implements TransactionServiceModel {
 
     @Override
     public List<PaymentTransaction> getTransactions() {
-        List<PaymentTransaction> transactions;
-        Query q = em.createQuery("SELECT t FROM PaymentTransaction t ", PaymentTransaction.class);
-        transactions = q.getResultList();
-        return transactions;
+        return em.createNamedQuery("findAllTransactions").getResultList();
     }
 
     @Override
@@ -52,9 +49,9 @@ public class TransactionServiceModelBean implements TransactionServiceModel {
 
     @Override
     public List<PaymentTransaction> getTransactionsByUser(Long id) {
-        List<PaymentTransaction> transactions;        
+        List<PaymentTransaction> transactions;
         transactions = em.createNamedQuery("findAllTransactionById").setParameter("payerId", id).setParameter("payeeId", id).getResultList();
-       
+
         return transactions;
     }
 
@@ -94,9 +91,9 @@ public class TransactionServiceModelBean implements TransactionServiceModel {
     @Override
     public List<PaymentTransaction> getTransactionByStatus(Long id, PaymentStatus status) {
         List<PaymentTransaction> transactions;
-        
+
         transactions = em.createNamedQuery("findAllPendingTransaction").setParameter("id", id).setParameter("status", status).getResultList();
-               
+
         return transactions;
     }
 

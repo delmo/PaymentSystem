@@ -25,13 +25,19 @@ import javax.inject.Inject;
  * @author Rhayan
  */
 @Stateless
-public class TransactionBean{
+public class TransactionBean {
 
     @Inject
     UserServiceModel userService;
 
     @Inject
     TransactionServiceModel transactionService;
+
+    @Inject
+    private CurrencyClientBean forex;
+
+    @Inject
+    private TimestampClientBean timer;
 
     private String email;
     private String currency;
@@ -41,82 +47,126 @@ public class TransactionBean{
     private String paymentType;
     private String paymentStatus;
     private BigDecimal amount;
-    private String parsedAmount;
+    //private String parsedAmount;
     private Date date;
     private PaymentTransaction paymentTransaction;
-    private List<PaymentTransaction> transactionList;    
-    
+    private List<PaymentTransaction> transactionList;
+
     private PaymentStatus completed;
 
     public PaymentStatus getCompleted() {
         completed = PaymentStatus.COMPLETED;
         return completed;
-    }    
-    
+    }
+
     public List<PaymentTransaction> showAllTransactions() {
         transactionList = transactionService.getTransactions();
         return transactionList;
     }
-    
-    public List<PaymentTransaction> getPendingTransactions(SystemUser user){             
+
+    public List<PaymentTransaction> getPendingTransactions(SystemUser user) {
         this.transactionList = transactionService.getTransactionByStatus(user.getId(), PaymentStatus.PENDING);
         return this.transactionList;
     }
-    
-    public List<PaymentTransaction> getUserTransactions(SystemUser user){
-        this.transactionList = transactionService.getTransactionsByUser(user.getId());              
+
+    public List<PaymentTransaction> getUserTransactions(SystemUser user) {
+        this.transactionList = transactionService.getTransactionsByUser(user.getId());
         return this.transactionList;
     }
 
-    public void submitPayment(String payer_email, String payee_email, BigDecimal amount, String currency) {
+    public boolean submitPayment(String payer_email, String payee_email, BigDecimal amount) {
+
+        if (!(userService.getEmails().contains(payer_email) && userService.getEmails().contains(payee_email))) {
+            return false;
+        }
 
         this.payee = userService.findUser(payee_email);
         this.payer = userService.findUser(payer_email);
+
+        if (this.payee == null || this.payer == null) {
+            return false;
+        }
+
+        if (this.payee == this.payer) {
+            return false;
+        }
+
+        if (!(amount instanceof BigDecimal)) {
+            return false;
+        }
 
         System.out.println("Payee email: " + payee.getEmail());
         System.out.println("Payer email: " + payer.getEmail());
 
         if (this.payee != null) {
             if (payer.getBalance().compareTo(amount) == 1) {
-                transactionService.sendPayment(this.payer, this.payee, PaymentType.DEBIT, PaymentStatus.COMPLETED, amount, new Date());
+                //convert payer's money to dollar and save the transaction
+                BigDecimal payerToDollar = forex.convert(this.payer.getCurrency(), "USD", amount);
+                transactionService.sendPayment(this.payer, this.payee, PaymentType.DEBIT, PaymentStatus.COMPLETED, payerToDollar, new Date());
 
-                BigDecimal payee_new_balance = this.payee.getBalance().add(amount);
+                //subtract the amount in payer's balance
+                //convert the amount to payee's money and add it to payee's balance
                 BigDecimal payer_new_balance = this.payer.getBalance().subtract(amount);
+                BigDecimal payees_money = forex.convert(payer.getCurrency(), payee.getCurrency(), amount);
+                BigDecimal payee_new_balance = this.payee.getBalance().add(payees_money);
 
                 this.payer.setBalance(payer_new_balance);
                 this.payee.setBalance(payee_new_balance);
 
                 System.out.println("Payee new balance: " + payee.getBalance());
                 System.out.println("Payer new balance: " + payer.getBalance());
-                
+
                 userService.updateUser(this.payer);
                 userService.updateUser(this.payee);
             }
         }
-        //return "transfer_confirmation";
+        return true;
     }
 
-    public void requestPayment(String payer_email, String payee_email, BigDecimal amount, String currency) {
+    public boolean requestPayment(String payer_email, String payee_email, BigDecimal amount) {
+
+        if (!(userService.getEmails().contains(payer_email) && userService.getEmails().contains(payee_email))) {
+            return false;
+        }
 
         this.payer = userService.findUser(payer_email);
         this.payee = userService.findUser(payee_email);
 
+        if (this.payee == null || this.payer == null) {
+            return false;
+        }
+
+        if (this.payee == this.payer) {
+            return false;
+        }
+
+        if (!(amount instanceof BigDecimal)) {
+            return false;
+        }
+
         System.out.println("Payee email: " + payee.getEmail());
         System.out.println("Payer email: " + payer.getEmail());
 
-        transactionService.sendPayment(this.payer, this.payee, PaymentType.CREDIT, PaymentStatus.PENDING, amount, new Date());
-    }
+        //get payee's currency and convert it dollar before saving to transaction
+        BigDecimal payeeToDollar = forex.convert(payee.getCurrency(), "USD", amount);
+        transactionService.sendPayment(this.payer, this.payee, PaymentType.CREDIT, PaymentStatus.PENDING, payeeToDollar, new Date());
 
-    
+        return true;
+    }
 
     public void approvePendingTransaction(Long id) {
         paymentTransaction = transactionService.getTransaction(id);
-        
+
         this.payer = paymentTransaction.getPayer();
         this.payee = paymentTransaction.getPayee();
 
-        BigDecimal payer_new_balance = this.payer.getBalance().subtract(paymentTransaction.getAmount());
-        BigDecimal payee_new_balance = this.payee.getBalance().add(paymentTransaction.getAmount());
+        //convert dollar to payer's money and subtract from its balance
+        BigDecimal payers_money = forex.convert("USD", payer.getCurrency(), paymentTransaction.getAmount());
+        BigDecimal payer_new_balance = this.payer.getBalance().subtract(payers_money);
+
+        //convert dollar to payee's money and add to its balance
+        BigDecimal payees_money = forex.convert("USD", payee.getCurrency(), paymentTransaction.getAmount());
+        BigDecimal payee_new_balance = this.payee.getBalance().add(payees_money);
 
         this.payer.setBalance(payer_new_balance);
         this.payee.setBalance(payee_new_balance);
@@ -126,17 +176,17 @@ public class TransactionBean{
 
         userService.updateUser(this.payer);
         userService.updateUser(this.payee);
-        
+
         paymentTransaction.setPaymentStatus(PaymentStatus.COMPLETED);
-        transactionService.saveTransaction(paymentTransaction);       
+        transactionService.saveTransaction(paymentTransaction);
     }
 
     public void cancelTransaction(Long id) {
         paymentTransaction = transactionService.getTransaction(id);
         paymentTransaction.setPaymentStatus(PaymentStatus.REJECTED);
-        transactionService.saveTransaction(paymentTransaction);        
+        transactionService.saveTransaction(paymentTransaction);
     }
-    
+
     public UserServiceModel getUserService() {
         return userService;
     }
@@ -242,16 +292,15 @@ public class TransactionBean{
         this.transactionList = transactionList;
     }
 
-    public String getParsedAmount() {
-
-        NumberFormat n = NumberFormat.getCurrencyInstance(Locale.US);
-        double money = amount.doubleValue();
-        parsedAmount = n.format(money);
-        return parsedAmount;
-    }
-
-    public void setParsedAmount(String parsedAmount) {
-        this.parsedAmount = parsedAmount;
-    }   
-
+//    public String getParsedAmount() {
+//
+//        NumberFormat n = NumberFormat.getCurrencyInstance(Locale.US);
+//        double money = amount.doubleValue();
+//        parsedAmount = n.format(money);
+//        return parsedAmount;
+//    }
+//
+//    public void setParsedAmount(String parsedAmount) {
+//        this.parsedAmount = parsedAmount;
+//    }   
 }

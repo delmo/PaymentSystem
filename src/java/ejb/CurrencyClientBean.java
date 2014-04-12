@@ -7,6 +7,8 @@
 package ejb;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.ws.rs.ClientErrorException;
@@ -25,22 +27,12 @@ import javax.ws.rs.client.WebTarget;
  *
  * @author Rhayan
  */
-@Named
-@RequestScoped
-public class CurrencyClientBean implements Serializable{
+@Stateless
+public class CurrencyClientBean {
     private WebTarget webTarget;
     private Client client;
     private static final String BASE_URI = "http://localhost:8080/PaymentSystem/";
-    private String currency1;
-    private String currency2;
-    private String amount;
-    private String convertedAmount;
-    private static final String INITIAL_DEPOSIT = "1000000000";
-
-    
-//    public CurrencyClientBean(){        
-//    }
-    
+   
     public CurrencyClientBean() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
         webTarget = client.target(BASE_URI).path("conversion");   
@@ -53,47 +45,17 @@ public class CurrencyClientBean implements Serializable{
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(String.class);
     }
 
-    public String initialDeposit(){       
-        
-        convertedAmount = getConversion(currency1, currency2, INITIAL_DEPOSIT);
-        
-        return "result";
+    public BigDecimal convert(String fromCurrency, String toCurrency, BigDecimal amount){
+        BigDecimal value;
+        String convertedValue;
+        convertedValue = getConversion(fromCurrency, toCurrency, amount.toString());
+        String[] result = convertedValue.split(" ");
+        value = new BigDecimal(result[3]);        
+        return value;        
     }
+        
     public void close() {
         client.close();
     }
 
-    public String getCurrency1() {
-        return currency1;
-    }
-
-    public void setCurrency1(String currency1) {
-        this.currency1 = currency1;
-    }
-
-    public String getCurrency2() {
-        return currency2;
-    }
-
-    public void setCurrency2(String currency2) {
-        this.currency2 = currency2;
-    }
-
-    public String getAmount() {
-        return amount;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public String getConvertedAmount() {        
-        return convertedAmount;
-    }
-
-    public void setConvertedAmount(String convertedAmount) {
-        this.convertedAmount = convertedAmount;
-    }
-    
-    
 }

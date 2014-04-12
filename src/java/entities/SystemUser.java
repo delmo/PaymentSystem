@@ -36,6 +36,10 @@ import javax.validation.constraints.Pattern;
     @NamedQuery(
             name="findAllSystemUsers",
             query="SELECT u FROM SystemUser u"
+    ),
+    @NamedQuery(
+            name="findAllEmails",
+            query="SELECT u.email FROM SystemUser u"
     )
 })
 public class SystemUser implements Serializable {

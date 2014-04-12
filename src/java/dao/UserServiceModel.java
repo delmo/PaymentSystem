@@ -32,4 +32,6 @@ public interface UserServiceModel {
     public SystemUser getUser(Long userId);
     
     public SystemUser findUser(String email);
+    
+    public List<String> getEmails();
 }
