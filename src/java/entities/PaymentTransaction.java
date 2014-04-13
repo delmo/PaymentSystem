@@ -57,11 +57,7 @@ public class PaymentTransaction implements Serializable {
     private PaymentType paymentType;
 
     @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus;
-    
-    @Enumerated(EnumType.STRING)
-    private Notification notification;
-    
+    private PaymentStatus paymentStatus;   
 
     @Column(name="AMOUNT", scale = 2, precision = 13)
     private BigDecimal amount;
@@ -85,8 +81,7 @@ public class PaymentTransaction implements Serializable {
         this.paymentType = paymentType; //debit or credit to payer 
         this.paymentStatus = paymentStatus; //pending or completed
         this.amount = amount;
-        this.date = date;
-        this.notification = Notification.UNREAD;
+        this.date = date;        
     }
 
     public Collection<SystemUser> getUsersAccount() {
@@ -147,17 +142,8 @@ public class PaymentTransaction implements Serializable {
 
     public void setPayee(SystemUser payee) {
         this.payee = payee;
-    }
-    
-     public Notification getNotification() {
-        return notification;
-    }
-
-    public void setNotification(Notification notification) {
-        this.notification = notification;
-    }
-
-    
+    }    
+        
     @Override
     public int hashCode() {
         int hash = 0;

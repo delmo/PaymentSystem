@@ -7,10 +7,8 @@ package timestamp;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.ejb.Stateful;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
-import javax.jws.WebParam;
 import javax.ejb.Stateless;
 
 /**
@@ -27,7 +25,7 @@ public class TimestampWS {
     @WebMethod(operationName = "getTimestamp")
     public String getTimestamp() {
         Date dateToday = new Date();;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/YYYY HH:mm a");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm a");
         return dateFormat.format(dateToday);
     }
 }

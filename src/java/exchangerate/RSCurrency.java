@@ -107,9 +107,9 @@ public class RSCurrency {
     private void setup() {
 
         SystemCurrency usd = new SystemCurrency("USD", "US Dollar", new BigDecimal("1"), new BigDecimal("1"));
-        SystemCurrency eur = new SystemCurrency("EUR", "Euro", new BigDecimal("0.73"), new BigDecimal("1.373"));
-        SystemCurrency gbp = new SystemCurrency("GBP", "US Dollar", new BigDecimal("0.60"), new BigDecimal("1.67"));        
-        SystemCurrency jpy = new SystemCurrency("JPY", "Japanese Yen", new BigDecimal("102.28"), new BigDecimal("0.01"));
+        SystemCurrency eur = new SystemCurrency("EUR", "Euro", new BigDecimal("0.727981"), new BigDecimal("1.373662"));
+        SystemCurrency gbp = new SystemCurrency("GBP", "US Dollar", new BigDecimal("0.597783"), new BigDecimal("1.672849"));        
+        SystemCurrency jpy = new SystemCurrency("JPY", "Japanese Yen", new BigDecimal("102.28542"), new BigDecimal("0.009777"));
 
         currencies.put("USD", usd);
         currencies.put("EUR", eur);

@@ -6,11 +6,10 @@
 
 package ejb;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
@@ -28,6 +27,7 @@ import javax.ws.rs.client.WebTarget;
  * @author Rhayan
  */
 @Stateless
+@DeclareRoles({"users", "admins"})
 public class CurrencyClientBean {
     private WebTarget webTarget;
     private Client client;
@@ -39,12 +39,14 @@ public class CurrencyClientBean {
         
     }
 
+    @PermitAll
     public String getConversion(String currency1, String currency2, String amount_of_currency1) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(java.text.MessageFormat.format("{0}/{1}/{2}", new Object[]{currency1, currency2, amount_of_currency1}));
         return resource.request(javax.ws.rs.core.MediaType.APPLICATION_JSON).get(String.class);
     }
 
+    @PermitAll
     public BigDecimal convert(String fromCurrency, String toCurrency, BigDecimal amount){
         BigDecimal value;
         String convertedValue;

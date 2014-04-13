@@ -10,22 +10,34 @@
         <h:link value="Back" outcome="show" /><br/><br/>
         <br/><br /><br />
         <h:form>
-            <h:outputText value="To pay someone please fill-in the details below."></h:outputText><br /><br />            
-            <h:outputText value="Enter the email address of the person you are trying to request a payment: "></h:outputText>
-            <h:inputText value="#{transactionJSFBean.other_email}" required="true" label="Email" validatorMessage="The email you supplied is invalid.">
-                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
-            </h:inputText><br />
-            <h:outputText value="Enter the amount: "></h:outputText>
-            <h:inputText value="#{transactionJSFBean.amount}"
-                         maxlength="6"
-                         converterMessage="Please enter digits only."
-                         validatorMessage="Please enter 6 digits.">
-                <f:validateLength minimum="1" maximum="6" />
-            </h:inputText><br />
-            
-            <h:commandButton value="Request payment" action="#{transactionJSFBean.request(userJSFBean.email)}" 
-                             onclick="if (!confirm('Are you sure you want to request the payment?'))
-                                         return false"/>           
+            <h:messages errorClass="errorMessage" infoClass="infoMessage" warnClass="warnMessage" style="color: red"></h:messages>
+            <h:panelGrid columns="1">
+                <h:outputText value="To request payment someone please fill-in the details below."></h:outputText><br/>           
+                <h:outputText value="Enter the email address of the person you are trying to request a payment: "></h:outputText>
+                <h:inputText id="email" value="#{transactionJSFBean.other_email}" 
+                             required="true" 
+                             requiredMessage="Email field cannot be empty."
+                             label="Email" 
+                             validatorMessage="The email you supplied is invalid."
+                             >
+                    <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                </h:inputText>
+                <h:outputText value="Enter the amount in your currency (#{userJSFBean.user.currency}): "></h:outputText>
+                <h:inputText id="value" value="#{transactionJSFBean.amount}"
+                             label="Amount"
+                             required="true"
+                             requiredMessage="Amount field cannot be empty."
+                             maxlength="6"
+                             converterMessage="Please enter digits only."
+                             validatorMessage="Please enter 6 digits."
+                             >
+                    <f:validateLength minimum="1" maximum="6" />
+                </h:inputText>
+
+                <h:commandButton value="Request payment" action="#{transactionJSFBean.request(userJSFBean.email)}" 
+                                 onclick="if (!confirm('Are you sure you want to request the payment?'))
+                                         return false"/>   
+            </h:panelGrid>
         </h:form>
     </h:body>
 </html>

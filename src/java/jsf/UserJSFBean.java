@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package jsf;
 
 import ejb.UserBean;
 import entities.SystemUser;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import javax.annotation.PreDestroy;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
@@ -23,21 +24,26 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Named
 @SessionScoped
-public class UserJSFBean implements Serializable{
-    
+public class UserJSFBean implements Serializable {
+
     @EJB
     UserBean userBean;
-    
+
     private String email;
     private String password;
     private SystemUser user;
     private String name;
     private boolean admin;
+    private BigDecimal balance;
 
+    public UserJSFBean() {
+    }  
+    
+    
     public boolean isAdmin() {
         admin = userBean.isAdmin(email);
         return admin;
-    }   
+    }
 
     public UserBean getUserBean() {
         return userBean;
@@ -50,9 +56,9 @@ public class UserJSFBean implements Serializable{
     public String getName() {
         name = userBean.getUser(email).getFirstname();
         return name;
-    }    
+    }
 
-    public SystemUser getUser() {        
+    public SystemUser getUser() {
         return userBean.getUser(email);
     }
 
@@ -75,19 +81,23 @@ public class UserJSFBean implements Serializable{
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    public String show(){
+
+    public BigDecimal getBalance() {        
+        return balance;
+    }
+         
+    public String show() {
         return "show";
     }
-    
-    public String continuePayment(){
+
+    public String continuePayment() {
         return "transfer";
     }
-    
-    public String continueRequest(){
+
+    public String continueRequest() {
         return "request";
     }
-    
+
     public String login() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -96,7 +106,6 @@ public class UserJSFBean implements Serializable{
         try {
             //this method will actually check in the realm for the provided credentials
             request.login(this.email, this.password);
-            
 
         } catch (ServletException e) {
             context.addMessage(null, new FacesMessage("Login failed."));
@@ -117,5 +126,9 @@ public class UserJSFBean implements Serializable{
         }
         return "/faces/index.xhtml";
     }
-    
+
+    @PreDestroy
+    public void preDestroy() {
+        userBean.updateLastVisit(user);
+    }
 }

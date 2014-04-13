@@ -6,7 +6,6 @@
 package ejb;
 
 import dao.UserGroupModel;
-import dao.UserGroupModelBean;
 import dao.UserServiceModel;
 import entities.SystemUser;
 import entities.UserGroup;
@@ -15,20 +14,19 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
@@ -37,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author Rhayan
  */
 @Stateless
+@DeclareRoles({"users", "admins"})
 public class UserBean{
 
     private Long id;
@@ -64,22 +63,17 @@ public class UserBean{
     
     @Inject
     private CurrencyClientBean forex;   
+      
     
-
-    public UserBean() {
-        user = new SystemUser();
-    }
-
     public void registerUser(String firstname, String lastname, String email, 
             String password, String currency){
         try {
             SystemUser sys_user;
-            UserGroup sys_user_group;
+            UserGroup sys_user_group;            
             
-            //formater.parse(timer.getDateTimeNow())
-            SimpleDateFormat formater = new SimpleDateFormat("MM/dd/YYYY HH:mm");
-            //Date today = formater.parse(timer.getDateTimeNow());
-            Date today = new Date();            
+            Date today = timer.getDateTimeNow();
+            
+            System.out.println(today);
             
             BigDecimal initialDeposit = forex.convert(currency, "USD", new BigDecimal("1000000"));
             
@@ -103,10 +97,12 @@ public class UserBean{
         }      
     }
     
+    @RolesAllowed({"admins"})
     public List<SystemUser> getUserlist() {
         return userlist = userStore.getUserList();
     }    
     
+    @PermitAll
     public boolean isAdmin(String email){
         return groupStore.getAdmins().contains(email);       
     }
@@ -159,7 +155,7 @@ public class UserBean{
         this.updateDate = updateDate;
     }
 
-    public BigDecimal getBalance() {
+    public BigDecimal getBalance() {        
         return balance;
     }
 
@@ -173,7 +169,7 @@ public class UserBean{
 
     public void setCurrency(String currency) {
         this.currency = currency;
-    }
+    }    
 
     public Long getId() {
         return id;
@@ -198,6 +194,7 @@ public class UserBean{
         this.user = user;
     }
 
+    @PermitAll
     public String login() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -214,6 +211,7 @@ public class UserBean{
         return searchByEmail();
     }
 
+    @PermitAll
     public String logout() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -226,6 +224,11 @@ public class UserBean{
         }
         return "/faces/index.xhtml";
     }
+    
+    public void updateLastVisit(SystemUser user){
+        user.setLastVisit(timer.getDateTimeNow());
+        userStore.saveUser(user);
+    }
 
     @PostConstruct
     public void postConstruct() {
@@ -233,7 +236,7 @@ public class UserBean{
     }
 
     @PreDestroy
-    public void preDestroy() {
+    public void preDestroy() {        
         System.out.println("UserBean: PreDestroy");
     }
 }

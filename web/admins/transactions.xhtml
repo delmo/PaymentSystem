@@ -16,19 +16,19 @@
                     #{transaction.id}                               
             </h:column>
             <h:column>
-                <f:facet name="header">Amount</f:facet>
+                <f:facet name="header">Amount in US Dollar</f:facet>
                     #{numberHelper.formatBalance(transaction.amount, "USD")}                               
             </h:column>
             <h:column>
-                <f:facet name="header">From</f:facet>
+                <f:facet name="header">From Account</f:facet>
                     #{transaction.payer.email}                               
             </h:column>   
             <h:column>
-                <f:facet name="header">To</f:facet>
+                <f:facet name="header">To Account</f:facet>
                     #{transaction.payee.email}                               
             </h:column>
             <h:column>
-                <f:facet name="header">Status</f:facet>
+                <f:facet name="header">Transaction Status</f:facet>
                     #{transaction.paymentStatus}                               
             </h:column>
         </h:dataTable>

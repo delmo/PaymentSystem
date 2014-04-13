@@ -9,11 +9,14 @@
         <center>
             <h2>Hello, please log in:</h2>
             <h:form>
-                Username: <h:inputText value="#{userJSFBean.email}"/>
-                Password: <h:inputSecret value="#{userJSFBean.password}"/>
-                <br/>
-                <h:commandButton value="Submit" action="#{userJSFBean.login}"/>
-                <h:commandButton value="Reset" type="reset"/>
+                <h:panelGrid columns="1">
+                    Username: <h:inputText value="#{userJSFBean.email}"/>
+                    Password: <h:inputSecret value="#{userJSFBean.password}"/>
+                    <br/>
+                    <h:commandButton value="Submit" action="#{userJSFBean.login}"/>
+                    <h:commandButton value="Reset" type="reset"/>
+                </h:panelGrid>
+
             </h:form>
             <br/>
             <h:link value="back to home page" outcome="index"/>

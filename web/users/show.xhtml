@@ -22,7 +22,7 @@
         <h:link value="Request payment from someone" outcome="#{userJSFBean.continueRequest()}" /><br />
 
         <br/><br /><br/>        
-        <h:outputText value="Your balance is #{numberHelper.formatBalance(userJSFBean.user.balance, userJSFBean.user.currency)}" />
+        <h:outputText value="Your balance is #{numberHelper.formatBalance(userRefresh.getLatestBalance(userJSFBean.email), userJSFBean.user.currency)}" />
 
 
     </h:body>

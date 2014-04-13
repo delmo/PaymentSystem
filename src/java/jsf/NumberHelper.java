@@ -5,10 +5,12 @@
  */
 package jsf;
 
+import ejb.CurrencyClientBean;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -20,6 +22,9 @@ import javax.inject.Named;
 @RequestScoped
 public class NumberHelper implements Serializable {
 
+    @EJB
+    private CurrencyClientBean currencyService;
+    
     public String formatBalance(BigDecimal balance, String currency) {
         Locale local;
         switch (currency) {
@@ -39,7 +44,9 @@ public class NumberHelper implements Serializable {
                 local = Locale.US;
                 break;
         }
-
-        return NumberFormat.getCurrencyInstance(local).format(balance);
-    }
+        
+        BigDecimal balanceToLocal = currencyService.convert("USD", currency, balance);
+        return NumberFormat.getCurrencyInstance(local).format(balanceToLocal);
+    }    
+    
 }
