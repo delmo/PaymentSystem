@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
+import javax.xml.ws.WebServiceRef;
+
 
 /**
  *
@@ -23,6 +25,7 @@ import javax.ejb.Stateless;
 public class TimestampClientBean {
 //    @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/localhost_8080/TimestampWS/TimestampWS.wsdl")
 //    private TimestampWS_Service service;
+    
 
     private Date dateTimeNow;
 
@@ -34,16 +37,27 @@ public class TimestampClientBean {
         } catch (ParseException ex) {
             Logger.getLogger(TimestampClientBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return dateTimeNow;
+        return dateTimeNow;        
     }
 
+    //@PermitAll
+    
+//    private String getTimestamp() {
+//        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+//        // If the calling of port operations may lead to race condition some synchronization is required.
+//        controllers.TimestampWS_Service service = new controllers.TimestampWS_Service();
+//        controllers.TimestampWS port = service.getTimestampWSPort();
+//        return port.getTimestamp();
+//    }
+
     @PermitAll
-    private String getTimestamp() {
+    public String getTimestamp() {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
-        controllers.TimestampWS_Service service = new controllers.TimestampWS_Service();
-        controllers.TimestampWS port = service.getTimestampWSPort();
+        TimestampWS_Service service = new TimestampWS_Service();
+        ejb.TimestampWS port = service.getTimestampWSPort();
         return port.getTimestamp();
     }
 
+    
 }
