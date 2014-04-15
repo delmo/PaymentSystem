@@ -6,24 +6,14 @@
 
 package dao;
 
-import entities.UserGroup;
 import entities.SystemUser;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 
 /**
- *
+ * DAO implementation for SystemUser entity.
  * @author Rhayan
  */
 @Stateless
@@ -32,45 +22,30 @@ public class UserServiceModelBean implements UserServiceModel{
     @PersistenceContext(unitName = "PaymentSystemPU")
     EntityManager em;
 
-    @Override
-    public void registerUser(String firstname, String lastname, String email, 
-            String password, BigDecimal balance, String currency, Date registrationDate, Date lastVisit) {
-        try {
-            SystemUser sys_user;
-            UserGroup sys_user_group;
-            
-
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-            String passwd = password;
-            md.update(passwd.getBytes("UTF-8")); // Change this to "UTF-16" if needed
-            byte[] digest = md.digest();
-            BigInteger bigInt = new BigInteger(1, digest);
-            String paswdToStoreInDB = bigInt.toString(16);
-
-            sys_user = new SystemUser(firstname, lastname, email, paswdToStoreInDB, balance, currency, registrationDate, lastVisit);
-            sys_user_group = new UserGroup(email, "users");            
-            
-            saveUser(sys_user);
-            em.persist(sys_user_group);
-            
-        } catch (UnsupportedEncodingException | NoSuchAlgorithmException ex) {
-            Logger.getLogger(UserServiceModelBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-       
-    }
-
+    /**
+     * Method for getting all SystemUser
+     * @return list of SystemUser
+     */
     @Override
     public List<SystemUser> getUserList() {
         List<SystemUser> users = em.createNamedQuery("findAllSystemUsers").getResultList();
         return users;
     }
     
+    /**
+     * Method for removing SystemUser.
+     * @param user SystemUser
+     */
     @Override
     public void removeUser(SystemUser user) {
         em.remove(user);
     }
     
+    /**
+     * Method for retrieving SystemUser
+     * @param userId Long id of SystemUser
+     * @return 
+     */
     @Override
     public SystemUser getUser(Long userId) {
         SystemUser user;
@@ -80,12 +55,21 @@ public class UserServiceModelBean implements UserServiceModel{
         return user;
     }
     
+    /**
+     * Method for getting SystemUser by email.
+     * @param email
+     * @return SystemUser 
+     */
     @Override
     public SystemUser findUser(String email) {
         SystemUser user = (SystemUser)em.createNamedQuery("findAllSystemUsersWithEmail").setParameter("email", email).getSingleResult();
         return user;        
     }
     
+    /**
+     * Method for saving SystemUser
+     * @param user 
+     */
     @Override
     public void saveUser(SystemUser user) {
         if(user.getId() == null){
@@ -95,16 +79,28 @@ public class UserServiceModelBean implements UserServiceModel{
         }
     }
 
+    /**
+     * Method for saving new SystemUser
+     * @param user 
+     */
     @Override
     public void saveNewUser(SystemUser user) {
         em.persist(user);
     }
 
+    /**
+     * Method for updating new SystemUser
+     * @param user 
+     */
     @Override
     public void updateUser(SystemUser user) {
         em.merge(user);
     }
 
+    /**
+     * Method for getting all email accounts in the system.
+     * @return list of SystemUser
+     */
     @Override
     public List<String> getEmails() {     
         return em.createNamedQuery("findAllEmails").getResultList();

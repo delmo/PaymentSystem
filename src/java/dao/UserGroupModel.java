@@ -10,7 +10,7 @@ import entities.UserGroup;
 import java.util.List;
 
 /**
- *
+ * DAO interface for UserGroup entity
  * @author Rhayan
  */
 public interface UserGroupModel {

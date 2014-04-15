@@ -12,12 +12,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
+ * DAO interface for SystemUser
  * @author Rhayan
  */
-public interface UserServiceModel {
-    public void registerUser(String firstname, String lastname, String email, String password, 
-            BigDecimal balance, String currency, Date registrationDate, Date lastVisit);
+public interface UserServiceModel {    
           
     public List<SystemUser> getUserList();
     

@@ -17,9 +17,10 @@ import java.util.List;
 /**
  *
  * @author Rhayan
+ * A DAO interface for PaymentTransaction entity
  */
 public interface TransactionServiceModel {    
-    
+        
     public List<PaymentTransaction> getTransactions();
     
     public void saveTransaction(PaymentTransaction transaction);
