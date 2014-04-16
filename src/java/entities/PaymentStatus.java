@@ -9,6 +9,7 @@ package entities;
 /**
  *
  * @author Rhayan
+ * Enum for payment status.
  */
 public enum PaymentStatus {
     COMPLETED,

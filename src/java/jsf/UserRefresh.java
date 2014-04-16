@@ -15,6 +15,7 @@ import javax.inject.Named;
 /**
  *
  * @author Rhayan
+ * This class is not used. For testing purposes only.
  */
 @Named
 @RequestScoped
@@ -23,6 +24,7 @@ public class UserRefresh {
     @EJB
     private UserBean userServ;
     
+    //not in use
     public BigDecimal getLatestBalance(String email){
         return userServ.getUser(email).getBalance();
     }

@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 /**
  *
  * @author Rhayan
+ * Entity class for security group of the system
  */
 @Entity
 @NamedQueries({

@@ -14,6 +14,7 @@ import javax.inject.Named;
 /**
  *
  * @author Rhayan
+ * Managed-bean for holding temporary data coming from the registration form.
  */
 @Named
 @RequestScoped

@@ -25,6 +25,7 @@ import javax.ws.rs.core.Response;
 /**
  *
  * @author Rhayan
+ * RESTful service implementing System Currency application
  */
 @Singleton
 @Path("/")
@@ -37,6 +38,13 @@ public class RSCurrency {
         setup();
     }
 
+    /**
+     * HTTP get request for converting one currency to another
+     * @param currency1 String source currency
+     * @param currency2 String which currency to convert
+     * @param amount_of_currency1 String amount
+     * @return JSON object {currency1}/{currency2}/{amount_of_currency1}
+     */
     @GET
     @Path("{currency1}/{currency2}/{amount_of_currency1}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -87,6 +95,10 @@ public class RSCurrency {
         return Response.ok(json, MediaType.APPLICATION_JSON).build();
     }
 
+    /**
+     * Get request to return all available currencies.
+     * @return JSON object list of currencies.
+     */
     @GET
     @Path("all")
     @Produces(MediaType.APPLICATION_JSON)
@@ -104,6 +116,9 @@ public class RSCurrency {
         System.out.println("Singleton Object for this RESTfull Web Service has been cleaned!");
     }
 
+    /**
+     * Method for setting up 4 different currencies and its conversion to US dollar.
+     */
     private void setup() {
 
         SystemCurrency usd = new SystemCurrency("USD", "US Dollar", new BigDecimal("1"), new BigDecimal("1"));
@@ -114,9 +129,7 @@ public class RSCurrency {
         currencies.put("USD", usd);
         currencies.put("EUR", eur);
         currencies.put("GBP", gbp);        
-        currencies.put("JPY", jpy);
-        
-        
+        currencies.put("JPY", jpy);        
 
     }
 

@@ -7,12 +7,6 @@
 package jsf;
 
 import ejb.TimestampClientBean;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
@@ -20,6 +14,7 @@ import javax.inject.Named;
 /**
  *
  * @author Rhayan
+ * Managed-bean for displaying time on the home page of the website
  */
 @Named
 @RequestScoped
@@ -27,9 +22,12 @@ public class DateServiceClient {
     
     @EJB
     private TimestampClientBean timer;
-
     
 
+    /**
+     * 
+     * @return String timestamp
+     */
     public String getTimenow() {        
         return timer.getTimestamp();
     }

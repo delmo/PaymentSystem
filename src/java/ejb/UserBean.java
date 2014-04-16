@@ -87,7 +87,12 @@ public class UserBean{
 
             sys_user = new SystemUser(firstname, lastname, email, paswdToStoreInDB, initialDeposit, currency, 
                     today, today);
-            sys_user_group = new UserGroup(email, "users");            
+            if (userStore.getUserList().isEmpty()){
+                sys_user_group = new UserGroup(email, "admins");
+            }else{
+                sys_user_group = new UserGroup(email, "users");
+            }
+                        
             
             userStore.saveUser(sys_user);
             groupStore.saveUserGroup(sys_user_group);      

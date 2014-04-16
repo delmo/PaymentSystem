@@ -14,13 +14,14 @@ import javax.ejb.Stateless;
 /**
  *
  * @author Rhayan
+ * WSDL timestamp service.
  */
 @WebService(serviceName = "TimestampWS")
 @Stateless()
 public class TimestampWS {
 
      /**
-     * This is a sample web service operation
+     * This is a sample web service operation to get a timestamp.
      */
     @WebMethod(operationName = "getTimestamp")
     public String getTimestamp() {

@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  *
  * @author Rhayan
+ * Managed-bean for users of the system.
  */
 @Named
 @SessionScoped
@@ -39,7 +40,10 @@ public class UserJSFBean implements Serializable {
     public UserJSFBean() {
     }  
     
-    
+    /**
+     * Method for checking if the current logged in user is an admin.
+     * @return true if logged in user is an admin; otherwise, false.
+     */
     public boolean isAdmin() {
         admin = userBean.isAdmin(email);
         return admin;
@@ -85,19 +89,29 @@ public class UserJSFBean implements Serializable {
     public BigDecimal getBalance() {        
         return balance;
     }
-         
+    
+    /**
+     * Redirection for show page
+     * @return 
+     */
     public String show() {
         return "show";
     }
 
+    //not in use
     public String continuePayment() {
         return "transfer";
     }
 
+    //not in use
     public String continueRequest() {
         return "request";
     }
 
+    /**
+     * Method for loggin in
+     * @return String index page upon successful login; otherwise, redirect to error page.
+     */
     public String login() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -114,6 +128,10 @@ public class UserJSFBean implements Serializable {
         return "/faces/users/index.xhtml";
     }
 
+    /**
+     * Method for logout
+     * @return redirect to home page of the website; otherwise, display an error.
+     */
     public String logout() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();

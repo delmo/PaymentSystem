@@ -18,6 +18,7 @@ import javax.inject.Named;
 /**
  *
  * @author Rhayan
+ * Managed bean that could be access by admin only.
  */
 @Named
 @RequestScoped
@@ -33,18 +34,34 @@ public class AdminJSFBean {
     
     private List<PaymentTransaction> transactions;
 
+    /**
+     * Method for getting list of transactions
+     * @return all transactions in the database.
+     */
     public List<PaymentTransaction> getTransactions() {
         return transactions = transactionBean.showAllTransactions();
     }
 
+    /**
+     * Method for getting all users in the system.
+     * @return all users of the system.
+     */
     public List<SystemUser> getUserlist() {
         return userlist = userBean.getUserlist();
     }
     
+    /**
+     * For redirection to admin section
+     * @return String link to admin home page
+     */
     public String admin(){
         return "/faces/admins/index.xhtml";
     }
     
+    /**
+     * For redirection to user's home page.
+     * @return String link to user's home page.
+     */
     public String userpage(){
         return "/faces/users/show.xhtml";
     }

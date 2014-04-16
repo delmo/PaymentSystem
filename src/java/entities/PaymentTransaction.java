@@ -24,6 +24,7 @@ import javax.persistence.Temporal;
 /**
  *
  * @author Rhayan
+ * Entity class for recording transactions
  */
 @Entity
 @NamedQueries({
@@ -83,7 +84,7 @@ public class PaymentTransaction implements Serializable {
         this.amount = amount;
         this.date = date;        
     }
-
+    
     public Collection<SystemUser> getUsersAccount() {
         return usersAccount;
     }

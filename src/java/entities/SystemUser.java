@@ -26,6 +26,7 @@ import javax.validation.constraints.Pattern;
 /**
  *
  * @author Rhayan
+ * Entity class for users of the system
  */
 @Entity
 @NamedQueries({

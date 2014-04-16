@@ -9,6 +9,7 @@ package entities;
 /**
  *
  * @author Rhayan
+ * Enum for payment type
  */
 public enum PaymentType {
     DEBIT,

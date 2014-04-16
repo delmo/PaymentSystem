@@ -17,6 +17,7 @@ import javax.inject.Named;
 /**
  *
  * @author Rhayan
+ * Helper class for formatting currency symbol corresponding to user's preferred currency
  */
 @Named
 @RequestScoped
@@ -25,6 +26,12 @@ public class NumberHelper implements Serializable {
     @EJB
     private CurrencyClientBean currencyService;
     
+    /**
+     * Method for formatting currency.
+     * @param balance user's balance
+     * @param currency user's currency
+     * @return formatted String balance with corresponding symbol
+     */
     public String formatBalance(BigDecimal balance, String currency) {
         Locale local;
         switch (currency) {

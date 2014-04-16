@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  *
  * @author Rhayan
+ * SystemCurrency class adapting the xml conversion
  */
 @XmlRootElement(name="conversion")
 public class SystemCurrency {
